@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: RoadSensor
+Bundle-SymbolicName: device.RoadSensor
+Bundle-Version: 1.0.0
+Bundle-Activator: sua.autonomouscar.roadsensor.Activator
+Bundle-Vendor: JoanFons@SUA
+Import-Package: org.osgi.framework,
+ sua.autonomouscar.devices.interfaces,
+ sua.autonomouscar.infrastructure,
+ sua.autonomouscar.infrastructure.devices,
+ sua.autonomouscar.interfaces

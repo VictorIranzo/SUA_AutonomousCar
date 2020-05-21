@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: FrontDistanceSensor
+Bundle-SymbolicName: device.FrontDistanceSensor
+Bundle-Version: 1.0.0
+Bundle-Activator: sua.autonomouscar.distancesensor.Activator
+Bundle-Vendor: JoanFons@SUA
+Import-Package: org.osgi.framework,
+ sua.autonomouscar.infrastructure,
+ sua.autonomouscar.infrastructure.devices,
+ sua.autonomouscar.interfaces

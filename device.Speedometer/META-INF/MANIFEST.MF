@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Speedometer
+Bundle-SymbolicName: device.Speedometer
+Bundle-Version: 1.0.0
+Bundle-Activator: sua.autonomouscar.speedometer.Activator
+Bundle-Vendor: JoanFons@SUA
+Import-Package: org.osgi.framework,
+ sua.autonomouscar.devices.interfaces,
+ sua.autonomouscar.engine,
+ sua.autonomouscar.infrastructure,
+ sua.autonomouscar.infrastructure.devices,
+ sua.autonomouscar.interfaces
+Export-Package: sua.autonomouscar.speedometer

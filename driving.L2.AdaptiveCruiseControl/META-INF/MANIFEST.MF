@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: L2_AdaptiveCruiseControl
+Bundle-SymbolicName: driving.L2.AdaptiveCruiseControl
+Bundle-Version: 1.0.0
+Bundle-Activator: sua.autonomouscar.driving.l2.acc.Activator
+Bundle-Vendor: JoanFons@SUA
+Import-Package: org.osgi.framework,
+ sua.autonomouscar.devices.interfaces,
+ sua.autonomouscar.driving.interfaces,
+ sua.autonomouscar.infrastructure,
+ sua.autonomouscar.infrastructure.devices,
+ sua.autonomouscar.infrastructure.driving,
+ sua.autonomouscar.interaction.interfaces,
+ sua.autonomouscar.interfaces,
+ sua.autonomouscar.simulation.interfaces
+Export-Package: sua.autonomouscar.driving.l2.acc

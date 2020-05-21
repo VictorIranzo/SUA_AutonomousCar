@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: L1_AssistedDriving
+Bundle-SymbolicName: driving.L1.AssistedDriving
+Bundle-Version: 1.0.0
+Bundle-Activator: sua.autonomouscar.driving.l1.assisteddriving.Activator
+Bundle-Vendor: JoanFons@SUA
+Import-Package: org.osgi.framework,
+ sua.autonomouscar.devices.interfaces,
+ sua.autonomouscar.driving.interfaces,
+ sua.autonomouscar.infrastructure,
+ sua.autonomouscar.infrastructure.driving,
+ sua.autonomouscar.interaction.interfaces,
+ sua.autonomouscar.interfaces,
+ sua.autonomouscar.simulation.interfaces
+Export-Package: sua.autonomouscar.driving.l1.assisteddriving

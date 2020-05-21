@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: SteeringWheel
+Bundle-SymbolicName: interaction.SteeringWheel
+Bundle-Version: 1.0.0
+Bundle-Activator: sua.autonomouscar.interaction.steeringwheel.Activator
+Bundle-Vendor: JoanFons@SUA
+Import-Package: org.osgi.framework,
+ sua.autonomouscar.devices.interfaces,
+ sua.autonomouscar.infrastructure,
+ sua.autonomouscar.infrastructure.interaction,
+ sua.autonomouscar.interaction.interfaces,
+ sua.autonomouscar.interfaces

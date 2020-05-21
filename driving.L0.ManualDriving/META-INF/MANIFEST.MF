@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: L0_ManualDriving
+Bundle-SymbolicName: driving.L0.ManualDriving
+Bundle-Version: 1.0.0
+Bundle-Activator: sua.autonomouscar.driving.l0.manual.Activator
+Bundle-Vendor: JoanFons@SUA
+Import-Package: org.osgi.framework,
+ sua.autonomouscar.driving.interfaces,
+ sua.autonomouscar.infrastructure,
+ sua.autonomouscar.infrastructure.driving,
+ sua.autonomouscar.interfaces,
+ sua.autonomouscar.simulation.interfaces

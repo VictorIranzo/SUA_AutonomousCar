@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Steering
+Bundle-SymbolicName: device.Steering
+Bundle-Version: 1.0.0
+Bundle-Activator: sua.autonomouscar.steering.Activator
+Bundle-Vendor: JoanFons@SUA
+Import-Package: org.osgi.framework,
+ sua.autonomouscar.devices.interfaces,
+ sua.autonomouscar.infrastructure,
+ sua.autonomouscar.infrastructure.devices,
+ sua.autonomouscar.interfaces
+Export-Package: sua.autonomouscar.steering

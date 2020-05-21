@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ParkInTheRoadShoulderFallbackPlan
+Bundle-SymbolicName: driving.FallbackPlan.ParkInTheRoadShoulder
+Bundle-Version: 1.0.0
+Bundle-Activator: sua.autonomouscar.driving.parkintheroadshoulderfallbackplan.Activator
+Bundle-Vendor: JoanFons@SUA
+Import-Package: org.osgi.framework,
+ sua.autonomouscar.devices.interfaces,
+ sua.autonomouscar.driving.interfaces,
+ sua.autonomouscar.infrastructure,
+ sua.autonomouscar.infrastructure.devices,
+ sua.autonomouscar.infrastructure.driving,
+ sua.autonomouscar.interaction.interfaces,
+ sua.autonomouscar.interfaces,
+ sua.autonomouscar.simulation.interfaces

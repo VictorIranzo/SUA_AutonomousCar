@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: AutonomousCar.infrastructure
+Bundle-SymbolicName: AutonomousCar.infrastructure
+Bundle-Version: 1.0.0
+Bundle-Vendor: JoanFons@SUA
+Automatic-Module-Name: AutonomousCar.infrastructure
+Import-Package: org.osgi.framework,
+ sua.autonomouscar.devices.interfaces,
+ sua.autonomouscar.driving.interfaces,
+ sua.autonomouscar.interaction.interfaces,
+ sua.autonomouscar.interfaces,
+ sua.autonomouscar.simulation.interfaces
+Export-Package: sua.autonomouscar.infrastructure,
+ sua.autonomouscar.infrastructure.devices,
+ sua.autonomouscar.infrastructure.driving,
+ sua.autonomouscar.infrastructure.interaction

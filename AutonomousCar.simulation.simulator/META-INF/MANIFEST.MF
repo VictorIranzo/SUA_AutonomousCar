@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: AutonomousCar.simulation.simulator
+Bundle-SymbolicName: AutonomousCar.simulation.simulator
+Bundle-Version: 1.0.0
+Import-Package: org.osgi.framework,
+ sua.autonomouscar.infrastructure,
+ sua.autonomouscar.interfaces,
+ sua.autonomouscar.simulation.interfaces
+Bundle-Activator: sua.autonomouscar.simulation.Activator
+Export-Package: sua.autonomouscar.simulation

@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: AutonomousCar.interfaces
+Bundle-SymbolicName: AutonomousCar.interfaces
+Bundle-Version: 1.0.0
+Bundle-Vendor: JoanFons@SUA
+Automatic-Module-Name: AutonomousCar.interfaces
+Export-Package: sua.autonomouscar.devices.interfaces,
+ sua.autonomouscar.driving.interfaces,
+ sua.autonomouscar.interaction.interfaces,
+ sua.autonomouscar.interfaces,
+ sua.autonomouscar.simulation.interfaces

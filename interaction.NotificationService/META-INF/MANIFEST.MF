@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: NotificationService
+Bundle-SymbolicName: interaction.NotificationService
+Bundle-Version: 1.0.0
+Bundle-Activator: sua.autonomouscar.notificationservice.Activator
+Bundle-Vendor: JoanFons@SUA
+Import-Package: org.osgi.framework,
+ sua.autonomouscar.devices.interfaces,
+ sua.autonomouscar.infrastructure,
+ sua.autonomouscar.infrastructure.interaction,
+ sua.autonomouscar.interaction.interfaces,
+ sua.autonomouscar.interfaces
