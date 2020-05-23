@@ -7,10 +7,8 @@ Bundle-Activator: sua.autonomouscar.driving.l3.highwaychauffer.Activator
 Bundle-Vendor: JoanFons@SUA
 Import-Package: org.osgi.framework,
  sua.autonomouscar.devices.interfaces,
+ sua.autonomouscar.driving.defaultvalues,
  sua.autonomouscar.driving.interfaces,
- sua.autonomouscar.driving.l2.acc,
- sua.autonomouscar.driving.l3.citychauffer,
- sua.autonomouscar.driving.l3.trafficjamchauffer,
  sua.autonomouscar.infrastructure,
  sua.autonomouscar.infrastructure.devices,
  sua.autonomouscar.infrastructure.driving,

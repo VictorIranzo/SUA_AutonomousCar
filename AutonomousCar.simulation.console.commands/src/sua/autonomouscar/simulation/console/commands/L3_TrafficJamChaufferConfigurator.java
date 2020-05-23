@@ -2,6 +2,7 @@ package sua.autonomouscar.simulation.console.commands;
 
 import org.osgi.framework.BundleContext;
 
+import sua.autonomouscar.driving.defaultvalues.L3_TrafficJamChauffer_DefaultValues;
 import sua.autonomouscar.driving.interfaces.IEmergencyFallbackPlan;
 import sua.autonomouscar.driving.interfaces.IL0_ManualDriving;
 import sua.autonomouscar.driving.interfaces.IL1_AssistedDriving;
@@ -11,7 +12,6 @@ import sua.autonomouscar.driving.interfaces.IL3_CityChauffer;
 import sua.autonomouscar.driving.interfaces.IL3_HighwayChauffer;
 import sua.autonomouscar.driving.interfaces.IL3_TrafficJamChauffer;
 import sua.autonomouscar.driving.interfaces.IParkInTheRoadShoulderFallbackPlan;
-import sua.autonomouscar.driving.l3.trafficjamchauffer.L3_TrafficJamChauffer;
 import sua.autonomouscar.infrastructure.OSGiUtils;
 
 public class L3_TrafficJamChaufferConfigurator {
@@ -31,9 +31,9 @@ public class L3_TrafficJamChaufferConfigurator {
 		theL3TrafficJamChaufferService.setRightLineSensor("RightLineSensor");
 		theL3TrafficJamChaufferService.setLeftLineSensor("LeftLineSensor");
 		
-		theL3TrafficJamChaufferService.setReferenceSpeed(L3_TrafficJamChauffer.DEFAULT_REFERENCE_SPEED);
-		theL3TrafficJamChaufferService.setLongitudinalSecurityDistance(L3_TrafficJamChauffer.DEFAULT_LONGITUDINAL_SECURITY_DISTANCE);
-		theL3TrafficJamChaufferService.setLateralSecurityDistance(L3_TrafficJamChauffer.DEFAULT_LATERAL_SECURITY_DISTANCE);
+		theL3TrafficJamChaufferService.setReferenceSpeed(L3_TrafficJamChauffer_DefaultValues.DEFAULT_REFERENCE_SPEED);
+		theL3TrafficJamChaufferService.setLongitudinalSecurityDistance(L3_TrafficJamChauffer_DefaultValues.DEFAULT_LONGITUDINAL_SECURITY_DISTANCE);
+		theL3TrafficJamChaufferService.setLateralSecurityDistance(L3_TrafficJamChauffer_DefaultValues.DEFAULT_LATERAL_SECURITY_DISTANCE);
 
 		theL3TrafficJamChaufferService.setNotificationService("NotificationService");		
 		

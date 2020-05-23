@@ -6,6 +6,7 @@ Bundle-Version: 1.0.0
 Bundle-Vendor: JoanFons@SUA
 Automatic-Module-Name: AutonomousCar.interfaces
 Export-Package: sua.autonomouscar.devices.interfaces,
+ sua.autonomouscar.driving.defaultvalues,
  sua.autonomouscar.driving.interfaces,
  sua.autonomouscar.interaction.interfaces,
  sua.autonomouscar.interfaces,

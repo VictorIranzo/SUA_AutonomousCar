@@ -1,20 +1,17 @@
 package sua.autonomouscar.driving.l2.acc;
 
 import org.osgi.framework.BundleContext;
-
+import sua.autonomouscar.driving.defaultvalues.L2_AdaptiveCruiseControl_DefaultValues;
 import sua.autonomouscar.driving.interfaces.IDrivingService;
 import sua.autonomouscar.driving.interfaces.IL2_AdaptiveCruiseControl;
 import sua.autonomouscar.infrastructure.devices.Engine;
 import sua.autonomouscar.infrastructure.driving.L2_DrivingService;
 
-public class L2_AdaptiveCruiseControl extends L2_DrivingService implements IL2_AdaptiveCruiseControl {
-	
-	public static final int DEFAULT_LONGITUDINAL_SECURITY_DISTANCE = 10000;
-	
+public class L2_AdaptiveCruiseControl extends L2_DrivingService implements IL2_AdaptiveCruiseControl {	
 	public L2_AdaptiveCruiseControl(BundleContext context, String id) {
 		super(context, id);
 		this.addImplementedInterface(IL2_AdaptiveCruiseControl.class.getName());
-		this.setLongitudinalSecurityDistance(DEFAULT_LONGITUDINAL_SECURITY_DISTANCE); // cms
+		this.setLongitudinalSecurityDistance(L2_AdaptiveCruiseControl_DefaultValues.DEFAULT_LONGITUDINAL_SECURITY_DISTANCE); // cms
 	}
 	
 	@Override

@@ -3,6 +3,7 @@ package sua.autonomouscar.driving.l3.highwaychauffer;
 import org.osgi.framework.BundleContext;
 
 import sua.autonomouscar.devices.interfaces.ISpeedometer;
+import sua.autonomouscar.driving.defaultvalues.*;
 import sua.autonomouscar.driving.interfaces.IDrivingService;
 import sua.autonomouscar.driving.interfaces.IEmergencyFallbackPlan;
 import sua.autonomouscar.driving.interfaces.IL0_ManualDriving;
@@ -14,9 +15,6 @@ import sua.autonomouscar.driving.interfaces.IL3_DrivingService;
 import sua.autonomouscar.driving.interfaces.IL3_HighwayChauffer;
 import sua.autonomouscar.driving.interfaces.IL3_TrafficJamChauffer;
 import sua.autonomouscar.driving.interfaces.IParkInTheRoadShoulderFallbackPlan;
-import sua.autonomouscar.driving.l2.acc.L2_AdaptiveCruiseControl;
-import sua.autonomouscar.driving.l3.citychauffer.L3_CityChauffer;
-import sua.autonomouscar.driving.l3.trafficjamchauffer.L3_TrafficJamChauffer;
 import sua.autonomouscar.infrastructure.OSGiUtils;
 import sua.autonomouscar.infrastructure.devices.Engine;
 import sua.autonomouscar.infrastructure.devices.Steering;
@@ -25,29 +23,14 @@ import sua.autonomouscar.interfaces.EFaceStatus;
 import sua.autonomouscar.interfaces.ERoadStatus;
 import sua.autonomouscar.interfaces.ERoadType;
 
-public class L3_HighwayChauffer extends L3_DrivingService implements IL3_HighwayChauffer {
-	
-	public static final int DEFAULT_LONGITUDINAL_SECURITY_DISTANCE = 12000;
-	public static final int DEFAULT_LATERAL_SECURITY_DISTANCE = 200;
-	public static final int DEFAULT_REFERENCE_SPEED = 120;
-
-	public static final int MY_FINE_ACCELERATION_RPM = 5;
-	public static final int MY_SMOOTH_ACCELERATION_RPM = 50;
-	public static final int MY_MEDIUM_ACCELERATION_RPM = 100;
-	public static final int MY_HIGH_ACCELERATION_RPM = 200;
-	public static final int MY_AGGRESSIVE_ACCELERATION_RPM = 500;
-	
-
-		
+public class L3_HighwayChauffer extends L3_DrivingService implements IL3_HighwayChauffer {		
 	public L3_HighwayChauffer(BundleContext context, String id) {
 		super(context, id);
 		this.addImplementedInterface(IL3_HighwayChauffer.class.getName());
-		this.setReferenceSpeed(DEFAULT_REFERENCE_SPEED);
-		this.setLongitudinalSecurityDistance(DEFAULT_LONGITUDINAL_SECURITY_DISTANCE);
-		this.setLateralSecurityDistance(DEFAULT_LATERAL_SECURITY_DISTANCE);
-	}
-
-	
+		this.setReferenceSpeed(L3_HighwayChauffer_DefaultValues.DEFAULT_REFERENCE_SPEED);
+		this.setLongitudinalSecurityDistance(L3_HighwayChauffer_DefaultValues.DEFAULT_LONGITUDINAL_SECURITY_DISTANCE);
+		this.setLateralSecurityDistance(L3_HighwayChauffer_DefaultValues.DEFAULT_LATERAL_SECURITY_DISTANCE);
+	}	
 	
 	@Override
 	public IDrivingService performTheDrivingFunction() {	
@@ -105,12 +88,12 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 			// Intentamos acercarnos a la velocidad referencia
 			int diffSpeed = this.getReferenceSpeed() - currentSpeed;
 			
-			int rpmCorrection = MY_FINE_ACCELERATION_RPM;
+			int rpmCorrection = L3_HighwayChauffer_DefaultValues.MY_FINE_ACCELERATION_RPM;
 			String rpmAppliedCorrection = "fine";
-			if ( Math.abs(diffSpeed) > 30 ) { rpmCorrection = MY_AGGRESSIVE_ACCELERATION_RPM; rpmAppliedCorrection = "aggressive"; }
-			else if ( Math.abs(diffSpeed) > 15 ) { rpmCorrection = MY_HIGH_ACCELERATION_RPM; rpmAppliedCorrection = "high"; }
-			else if ( Math.abs(diffSpeed) > 5 ) { rpmCorrection = MY_MEDIUM_ACCELERATION_RPM; rpmAppliedCorrection = "medium"; }
-			else if ( Math.abs(diffSpeed) > 1 ) { rpmCorrection = MY_SMOOTH_ACCELERATION_RPM; rpmAppliedCorrection = "smooth"; }
+			if ( Math.abs(diffSpeed) > 30 ) { rpmCorrection = L3_HighwayChauffer_DefaultValues.MY_AGGRESSIVE_ACCELERATION_RPM; rpmAppliedCorrection = "aggressive"; }
+			else if ( Math.abs(diffSpeed) > 15 ) { rpmCorrection = L3_HighwayChauffer_DefaultValues.MY_HIGH_ACCELERATION_RPM; rpmAppliedCorrection = "high"; }
+			else if ( Math.abs(diffSpeed) > 5 ) { rpmCorrection = L3_HighwayChauffer_DefaultValues.MY_MEDIUM_ACCELERATION_RPM; rpmAppliedCorrection = "medium"; }
+			else if ( Math.abs(diffSpeed) > 1 ) { rpmCorrection = L3_HighwayChauffer_DefaultValues.MY_SMOOTH_ACCELERATION_RPM; rpmAppliedCorrection = "smooth"; }
 
 
 			if ( diffSpeed > 0  ) {
@@ -220,17 +203,13 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 	public IL3_DrivingService changeToL2Driving() {
 		// First, stops driving.
 		this.stopDriving();
-		
-		// Creates the L2 driving control and registers it.
-		L2_AdaptiveCruiseControl drivingService = new L2_AdaptiveCruiseControl(context, "L2_AdaptiveCruiseControl");
-		drivingService.registerThing();
 
 		// Obtains the registered control and configures it.
 		IL2_AdaptiveCruiseControl theL2AdaptiveCruiseControlService = OSGiUtils.getService(context, IL2_AdaptiveCruiseControl.class);
 		theL2AdaptiveCruiseControlService.setEngine("Engine");
 		theL2AdaptiveCruiseControlService.setFrontDistanceSensor("FrontDistanceSensor");
 		
-		theL2AdaptiveCruiseControlService.setLongitudinalSecurityDistance(L2_AdaptiveCruiseControl.DEFAULT_LONGITUDINAL_SECURITY_DISTANCE);
+		theL2AdaptiveCruiseControlService.setLongitudinalSecurityDistance(L2_AdaptiveCruiseControl_DefaultValues.DEFAULT_LONGITUDINAL_SECURITY_DISTANCE);
 
 		theL2AdaptiveCruiseControlService.setNotificationService("NotificationService");		
 		
@@ -243,10 +222,6 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 	public IL3_DrivingService changeToL3TrafficDriving() {
 		// First, stops driving.
 		this.stopDriving();
-		
-		// Creates the L3 Traffic Jam Chauffer driving control and registers it.
-		L3_TrafficJamChauffer drivingService = new L3_TrafficJamChauffer(context, "L3_TrafficJamChauffer");
-		drivingService.registerThing();
 
 		// Obtains the registered control and configures it.
 		IL3_TrafficJamChauffer theL3TrafficJamChaufferService = OSGiUtils.getService(context, IL3_TrafficJamChauffer.class);
@@ -261,9 +236,9 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 		theL3TrafficJamChaufferService.setRightLineSensor("RightLineSensor");
 		theL3TrafficJamChaufferService.setLeftLineSensor("LeftLineSensor");
 		
-		theL3TrafficJamChaufferService.setReferenceSpeed(L3_TrafficJamChauffer.DEFAULT_REFERENCE_SPEED);
-		theL3TrafficJamChaufferService.setLongitudinalSecurityDistance(L3_TrafficJamChauffer.DEFAULT_LONGITUDINAL_SECURITY_DISTANCE);
-		theL3TrafficJamChaufferService.setLateralSecurityDistance(L3_TrafficJamChauffer.DEFAULT_LATERAL_SECURITY_DISTANCE);
+		theL3TrafficJamChaufferService.setReferenceSpeed(L3_TrafficJamChauffer_DefaultValues.DEFAULT_REFERENCE_SPEED);
+		theL3TrafficJamChaufferService.setLongitudinalSecurityDistance(L3_TrafficJamChauffer_DefaultValues.DEFAULT_LONGITUDINAL_SECURITY_DISTANCE);
+		theL3TrafficJamChaufferService.setLateralSecurityDistance(L3_TrafficJamChauffer_DefaultValues.DEFAULT_LATERAL_SECURITY_DISTANCE);
 
 		theL3TrafficJamChaufferService.setNotificationService("NotificationService");		
 		
@@ -280,10 +255,6 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 		// First, stops driving.
 		this.stopDriving();
 		
-		// Creates the L3 City Chauffer driving control and registers it.
-		L3_CityChauffer drivingService = new L3_CityChauffer(context, "L3_CityChauffer");
-		drivingService.registerThing();
-		
 		// Obtains the registered control and configures it.
 		IL3_CityChauffer theL3CityChaufferService = OSGiUtils.getService(context, IL3_CityChauffer.class);
 		theL3CityChaufferService.setHumanSensors("HumanSensors");
@@ -297,9 +268,9 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 		theL3CityChaufferService.setRightLineSensor("RightLineSensor");
 		theL3CityChaufferService.setLeftLineSensor("LeftLineSensor");
 		
-		theL3CityChaufferService.setReferenceSpeed(L3_CityChauffer.DEFAULT_REFERENCE_SPEED);
-		theL3CityChaufferService.setLongitudinalSecurityDistance(L3_CityChauffer.DEFAULT_LONGITUDINAL_SECURITY_DISTANCE);
-		theL3CityChaufferService.setLateralSecurityDistance(L3_CityChauffer.DEFAULT_LATERAL_SECURITY_DISTANCE);
+		theL3CityChaufferService.setReferenceSpeed(L3_CityChauffer_DefaultValues.DEFAULT_REFERENCE_SPEED);
+		theL3CityChaufferService.setLongitudinalSecurityDistance(L3_CityChauffer_DefaultValues.DEFAULT_LONGITUDINAL_SECURITY_DISTANCE);
+		theL3CityChaufferService.setLateralSecurityDistance(L3_CityChauffer_DefaultValues.DEFAULT_LATERAL_SECURITY_DISTANCE);
 
 		theL3CityChaufferService.setNotificationService("NotificationService");		
 

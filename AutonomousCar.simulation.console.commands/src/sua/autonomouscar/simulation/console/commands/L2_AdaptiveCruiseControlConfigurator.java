@@ -2,6 +2,7 @@ package sua.autonomouscar.simulation.console.commands;
 
 import org.osgi.framework.BundleContext;
 
+import sua.autonomouscar.driving.defaultvalues.*;
 import sua.autonomouscar.driving.interfaces.IEmergencyFallbackPlan;
 import sua.autonomouscar.driving.interfaces.IL0_ManualDriving;
 import sua.autonomouscar.driving.interfaces.IL1_AssistedDriving;
@@ -23,7 +24,7 @@ public class L2_AdaptiveCruiseControlConfigurator {
 		theL2AdaptiveCruiseControlService.setEngine("Engine");
 		theL2AdaptiveCruiseControlService.setFrontDistanceSensor("FrontDistanceSensor");
 		
-		theL2AdaptiveCruiseControlService.setLongitudinalSecurityDistance(L2_AdaptiveCruiseControl.DEFAULT_LONGITUDINAL_SECURITY_DISTANCE);
+		theL2AdaptiveCruiseControlService.setLongitudinalSecurityDistance(L2_AdaptiveCruiseControl_DefaultValues.DEFAULT_LONGITUDINAL_SECURITY_DISTANCE);
 
 		theL2AdaptiveCruiseControlService.setNotificationService("NotificationService");		
 

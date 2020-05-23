@@ -5,6 +5,7 @@ Bundle-SymbolicName: AutonomousCar.simulation.console.commands
 Bundle-Version: 1.0.0
 Import-Package: org.osgi.framework,
  sua.autonomouscar.devices.interfaces,
+ sua.autonomouscar.driving.defaultvalues,
  sua.autonomouscar.driving.interfaces,
  sua.autonomouscar.driving.l1.assisteddriving,
  sua.autonomouscar.driving.l2.acc,
