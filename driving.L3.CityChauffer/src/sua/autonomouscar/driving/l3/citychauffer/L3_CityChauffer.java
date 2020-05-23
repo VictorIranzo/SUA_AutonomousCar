@@ -38,7 +38,9 @@ public class L3_CityChauffer extends L3_DrivingService implements IL3_CityChauff
 			this.debugMessage("Cannot drive in L3 Autonomy level ...");
 			this.getNotificationService().notify("Cannot drive in L3 Autonomy level ... Changing to L2 level.");
 			
-			this.changeToL2Driving();		
+			this.changeToL2Driving();
+			
+			return this;	
 		}
 		
 		// ADS_L3-5.
@@ -56,7 +58,9 @@ public class L3_CityChauffer extends L3_DrivingService implements IL3_CityChauff
 				this.getNotificationService().notify("Changing to Highway Chauffer.");
 				
 				this.changeToL3HighwayDriving();
-			}		
+			}
+			
+			return this;	
 		}
 		
 		// ADS_L3-6.
@@ -73,7 +77,9 @@ public class L3_CityChauffer extends L3_DrivingService implements IL3_CityChauff
 			{
 				this.debugMessage("Activating the Fallback Plan due to a fail in human sensors ...");
 				this.activateTheFallbackPlan();
-			}		
+			}
+			
+			return this;
 		}
 				
 		if (!this.getLeftLineSensor().isWorking() || !this.getRightLineSensor().isWorking())
@@ -89,7 +95,9 @@ public class L3_CityChauffer extends L3_DrivingService implements IL3_CityChauff
 			{
 				this.debugMessage("Activating the Fallback Plan due to a fail in line sensor ...");
 				this.activateTheFallbackPlan();
-			}		
+			}
+			
+			return this;
 		}
 		
 		if (!this.getRoadSensor().isWorking())
@@ -105,7 +113,9 @@ public class L3_CityChauffer extends L3_DrivingService implements IL3_CityChauff
 			{
 				this.debugMessage("Activating the Fallback Plan due to a fail in road sensor ...");
 				this.activateTheFallbackPlan();
-			}		
+			}
+			
+			return this;
 		}
 		
 		// Quizás cada sensor pueda monitorizarse de forma individual.
@@ -169,7 +179,9 @@ public class L3_CityChauffer extends L3_DrivingService implements IL3_CityChauff
 						this.activateTheFallbackPlan();
 					}
 			    }
-			}		
+			}
+			
+			return this;
 		}
 		
 		//

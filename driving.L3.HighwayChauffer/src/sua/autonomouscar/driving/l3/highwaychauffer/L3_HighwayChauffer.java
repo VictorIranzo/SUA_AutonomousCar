@@ -28,7 +28,9 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 			this.debugMessage("Cannot drive in L3 Autonomy level ...");
 			this.getNotificationService().notify("Cannot drive in L3 Autonomy level ... Changing to L2 level.");
 			
-			this.changeToL2Driving();	
+			this.changeToL2Driving();
+			
+			return this;
 		}
 		
 		// ADS_L3-2.
@@ -37,7 +39,9 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 			this.debugMessage("Cannot drive in L3 Highway ...");
 			this.getNotificationService().notify("Cannot drive in L3 Highway ... Changing to L3 Traffic Jam Chauffer.");
 			
-			this.changeToL3TrafficDriving();	
+			this.changeToL3TrafficDriving();
+			
+			return this;
 		}
 
 		// ADS_L3-3.
@@ -45,7 +49,9 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 			this.debugMessage("Changing to L3 City Chauffer...");
 			this.getNotificationService().notify("Changing to L3 City Chauffer...");
 			
-			this.changeToL3CityDriving();	
+			this.changeToL3CityDriving();
+			
+			return this;	
 		}
 		
 		// ADS_L3-6.
@@ -62,7 +68,9 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 			{
 				this.debugMessage("Activating the Fallback Plan due to a fail in human sensors ...");
 				this.activateTheFallbackPlan();
-			}		
+			}
+			
+			return this;
 		}
 				
 		if (!this.getLeftLineSensor().isWorking() || !this.getRightLineSensor().isWorking())
@@ -78,7 +86,9 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 			{
 				this.debugMessage("Activating the Fallback Plan due to a fail in line sensor ...");
 				this.activateTheFallbackPlan();
-			}		
+			}
+			
+			return this;
 		}
 		
 		if (!this.getRoadSensor().isWorking())
@@ -94,7 +104,9 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 			{
 				this.debugMessage("Activating the Fallback Plan due to a fail in road sensor ...");
 				this.activateTheFallbackPlan();
-			}		
+			}
+			
+			return this;
 		}
 		
 		// Quizás cada sensor pueda monitorizarse de forma individual.
@@ -158,7 +170,9 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 						this.activateTheFallbackPlan();
 					}
 			    }
-			}			
+			}
+			
+			return this;
 		}
 		
 		//
