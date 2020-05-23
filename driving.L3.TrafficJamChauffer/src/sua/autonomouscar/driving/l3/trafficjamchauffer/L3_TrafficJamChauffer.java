@@ -6,13 +6,16 @@ import sua.autonomouscar.devices.interfaces.ISpeedometer;
 import sua.autonomouscar.driving.interfaces.IDrivingService;
 import sua.autonomouscar.driving.interfaces.IL2_AdaptiveCruiseControl;
 import sua.autonomouscar.driving.interfaces.IL3_DrivingService;
+import sua.autonomouscar.driving.interfaces.IL3_HighwayChauffer;
 import sua.autonomouscar.driving.interfaces.IL3_TrafficJamChauffer;
 import sua.autonomouscar.driving.l2.acc.L2_AdaptiveCruiseControl;
+import sua.autonomouscar.driving.l3.highwaychauffer.L3_HighwayChauffer;
 import sua.autonomouscar.infrastructure.OSGiUtils;
 import sua.autonomouscar.infrastructure.devices.Engine;
 import sua.autonomouscar.infrastructure.devices.Steering;
 import sua.autonomouscar.infrastructure.driving.L3_DrivingService;
 import sua.autonomouscar.interfaces.EFaceStatus;
+import sua.autonomouscar.interfaces.ERoadStatus;
 import sua.autonomouscar.interfaces.ERoadType;
 
 public class L3_TrafficJamChauffer extends L3_DrivingService implements IL3_TrafficJamChauffer {
@@ -40,11 +43,21 @@ public class L3_TrafficJamChauffer extends L3_DrivingService implements IL3_Traf
 	@Override
 	public IDrivingService performTheDrivingFunction() {		
 		// ADS_L3-1.
-		if ( this.getRoadSensor().getRoadType() == ERoadType.OFF_ROAD || this.getRoadSensor().getRoadType() == ERoadType.STD_ROAD ) {
+		if ( this.getRoadSensor().getRoadType() == ERoadType.OFF_ROAD || this.getRoadSensor().getRoadType() == ERoadType.STD_ROAD) {
 			this.debugMessage("Cannot drive in L3 Autonomy level ...");
 			this.getNotificationService().notify("Cannot drive in L3 Autonomy level ... Changing to L2 level.");
 			
 			this.changeToL2Driving();
+			
+			return this;	
+		}
+		
+		// ADS_L3-4.
+		if ( this.getRoadSensor().getRoadStatus() == ERoadStatus.FLUID) {
+			this.debugMessage("Changing from L3 Traffic Jam Chauffer to Highway chauffer...");
+			this.getNotificationService().notify("Changing from L3 Traffic Jam Chauffer to Highway chauffer...");
+			
+			this.changeToL3HighwayDriving();
 			
 			return this;	
 		}
@@ -203,6 +216,37 @@ public class L3_TrafficJamChauffer extends L3_DrivingService implements IL3_Traf
 		
 		// Starts driving with L2 level.
 		theL2AdaptiveCruiseControlService.startDriving();
+		
+		return this;
+	}
+	
+	public IL3_DrivingService changeToL3HighwayDriving() {
+		// First, stops driving.
+		this.stopDriving();
+		
+		// Creates the L3 driving control and registers it.
+		IL3_HighwayChauffer theL3HighwayChaufferService = OSGiUtils.getService(context, IL3_HighwayChauffer.class);
+		theL3HighwayChaufferService.setHumanSensors("HumanSensors");
+		theL3HighwayChaufferService.setRoadSensor("RoadSensor");
+		theL3HighwayChaufferService.setEngine("Engine");
+		theL3HighwayChaufferService.setSteering("Steering");
+		theL3HighwayChaufferService.setFrontDistanceSensor("FrontDistanceSensor");
+		theL3HighwayChaufferService.setRearDistanceSensor("RearDistanceSensor");
+		theL3HighwayChaufferService.setRightDistanceSensor("RightDistanceSensor");
+		theL3HighwayChaufferService.setLeftDistanceSensor("LeftDistanceSensor");
+		theL3HighwayChaufferService.setRightLineSensor("RightLineSensor");
+		theL3HighwayChaufferService.setLeftLineSensor("LeftLineSensor");
+		
+		theL3HighwayChaufferService.setReferenceSpeed(L3_HighwayChauffer.DEFAULT_REFERENCE_SPEED);
+		theL3HighwayChaufferService.setLongitudinalSecurityDistance(L3_HighwayChauffer.DEFAULT_LONGITUDINAL_SECURITY_DISTANCE);
+		theL3HighwayChaufferService.setLateralSecurityDistance(L3_HighwayChauffer.DEFAULT_LATERAL_SECURITY_DISTANCE);
+
+		theL3HighwayChaufferService.setNotificationService("NotificationService");		
+
+		theL3HighwayChaufferService.setFallbackPlan("ParkInTheRoadShoulderFallbackPlan");		
+		
+		// Starts driving with L3 Highway level.
+		theL3HighwayChaufferService.startDriving();
 		
 		return this;
 	}

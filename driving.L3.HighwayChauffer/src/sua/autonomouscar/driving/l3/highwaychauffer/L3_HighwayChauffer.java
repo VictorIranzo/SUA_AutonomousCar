@@ -233,7 +233,7 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 		// First, stops driving.
 		this.stopDriving();
 		
-		// Creates the L2 driving control and registers it.
+		// Creates the L3 Traffic Jam Chauffer driving control and registers it.
 		L3_TrafficJamChauffer drivingService = new L3_TrafficJamChauffer(context, "L3_TrafficJamChauffer");
 		drivingService.registerThing();
 
@@ -258,7 +258,7 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 		
 		theL3TrafficJamChaufferService.setFallbackPlan("EmergencyFallbackPlan");	
 		
-		// Starts driving with L2 level.
+		// Starts driving with L3 level.
 		theL3TrafficJamChaufferService.startDriving();
 		
 		return this;
