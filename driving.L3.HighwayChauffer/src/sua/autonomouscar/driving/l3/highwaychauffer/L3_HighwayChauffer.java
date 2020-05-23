@@ -15,6 +15,7 @@ import sua.autonomouscar.driving.interfaces.IL3_HighwayChauffer;
 import sua.autonomouscar.driving.interfaces.IL3_TrafficJamChauffer;
 import sua.autonomouscar.driving.interfaces.IParkInTheRoadShoulderFallbackPlan;
 import sua.autonomouscar.driving.l2.acc.L2_AdaptiveCruiseControl;
+import sua.autonomouscar.driving.l3.trafficjamchauffer.L3_TrafficJamChauffer;
 import sua.autonomouscar.infrastructure.OSGiUtils;
 import sua.autonomouscar.infrastructure.devices.Engine;
 import sua.autonomouscar.infrastructure.devices.Steering;
@@ -59,10 +60,15 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 			return this;
 		}
 		
-		// ADS_L3-1.
+		// ADS_L3-2.
 		if (this.getRoadSensor().getRoadStatus() == ERoadStatus.COLLAPSED || this.getRoadSensor().getRoadStatus() == ERoadStatus.JAM)
 		{
+			this.debugMessage("Cannot drive in L3 Highway ...");
+			this.getNotificationService().notify("Cannot drive in L3 Highway ... Changing to L3 Traffic Jam Chauffer.");
 			
+			this.changeToL3TrafficDriving();
+			
+			return this;
 		}
 
 		//
@@ -219,6 +225,41 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 		
 		// Starts driving with L2 level.
 		theL2AdaptiveCruiseControlService.startDriving();
+		
+		return this;
+	}
+	
+	public IL3_DrivingService changeToL3TrafficDriving() {
+		// First, stops driving.
+		this.stopDriving();
+		
+		// Creates the L2 driving control and registers it.
+		L3_TrafficJamChauffer drivingService = new L3_TrafficJamChauffer(context, "L3_TrafficJamChauffer");
+		drivingService.registerThing();
+
+		// Obtains the registered control and configures it.
+		IL3_TrafficJamChauffer theL3TrafficJamChaufferService = OSGiUtils.getService(context, IL3_TrafficJamChauffer.class);
+		theL3TrafficJamChaufferService.setHumanSensors("HumanSensors");
+		theL3TrafficJamChaufferService.setRoadSensor("RoadSensor");
+		theL3TrafficJamChaufferService.setEngine("Engine");
+		theL3TrafficJamChaufferService.setSteering("Steering");
+		theL3TrafficJamChaufferService.setFrontDistanceSensor("FrontDistanceSensor");
+		theL3TrafficJamChaufferService.setRearDistanceSensor("RearDistanceSensor");
+		theL3TrafficJamChaufferService.setRightDistanceSensor("RightDistanceSensor");
+		theL3TrafficJamChaufferService.setLeftDistanceSensor("LeftDistanceSensor");
+		theL3TrafficJamChaufferService.setRightLineSensor("RightLineSensor");
+		theL3TrafficJamChaufferService.setLeftLineSensor("LeftLineSensor");
+		
+		theL3TrafficJamChaufferService.setReferenceSpeed(L3_TrafficJamChauffer.DEFAULT_REFERENCE_SPEED);
+		theL3TrafficJamChaufferService.setLongitudinalSecurityDistance(L3_TrafficJamChauffer.DEFAULT_LONGITUDINAL_SECURITY_DISTANCE);
+		theL3TrafficJamChaufferService.setLateralSecurityDistance(L3_TrafficJamChauffer.DEFAULT_LATERAL_SECURITY_DISTANCE);
+
+		theL3TrafficJamChaufferService.setNotificationService("NotificationService");		
+		
+		theL3TrafficJamChaufferService.setFallbackPlan("EmergencyFallbackPlan");	
+		
+		// Starts driving with L2 level.
+		theL3TrafficJamChaufferService.startDriving();
 		
 		return this;
 	}
