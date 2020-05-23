@@ -40,7 +40,7 @@ public class L3_CityChauffer extends L3_DrivingService implements IL3_CityChauff
 	@Override
 	public IDrivingService performTheDrivingFunction() {
 		// ADS_L3-1.
-		if ( this.getRoadSensor().getRoadType() == ERoadType.OFF_ROAD || this.getRoadSensor().getRoadType() == ERoadType.STD_ROAD ) {
+		if ( this.getRoadSensor().getRoadType() == ERoadType.OFF_ROAD || this.getRoadSensor().getRoadType() == ERoadType.STD_ROAD) {
 			this.debugMessage("Cannot drive in L3 Autonomy level ...");
 			this.getNotificationService().notify("Cannot drive in L3 Autonomy level ... Changing to L2 level.");
 			
@@ -48,7 +48,7 @@ public class L3_CityChauffer extends L3_DrivingService implements IL3_CityChauff
 			
 			return this;	
 		}
-
+		
 		//
 		// Control de la función primaria: MOVIMIENTO LONGITUDINAL
 		//

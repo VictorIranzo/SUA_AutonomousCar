@@ -15,6 +15,7 @@ import sua.autonomouscar.driving.interfaces.IL3_HighwayChauffer;
 import sua.autonomouscar.driving.interfaces.IL3_TrafficJamChauffer;
 import sua.autonomouscar.driving.interfaces.IParkInTheRoadShoulderFallbackPlan;
 import sua.autonomouscar.driving.l2.acc.L2_AdaptiveCruiseControl;
+import sua.autonomouscar.driving.l3.citychauffer.L3_CityChauffer;
 import sua.autonomouscar.driving.l3.trafficjamchauffer.L3_TrafficJamChauffer;
 import sua.autonomouscar.infrastructure.OSGiUtils;
 import sua.autonomouscar.infrastructure.devices.Engine;
@@ -71,6 +72,16 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 			return this;
 		}
 
+		// ADS_L3-3.
+		if ( this.getRoadSensor().getRoadType() == ERoadType.CITY) {
+			this.debugMessage("Changing to L3 City Chauffer...");
+			this.getNotificationService().notify("Changing to L3 City Chauffer...");
+			
+			this.changeToL3CityDriving();
+			
+			return this;	
+		}
+		
 		//
 		// Control de la función primaria: MOVIMIENTO LONGITUDINAL
 		//
@@ -260,6 +271,42 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 		
 		// Starts driving with L3 level.
 		theL3TrafficJamChaufferService.startDriving();
+		
+		return this;
+	}
+	
+	public IL3_DrivingService changeToL3CityDriving()
+	{
+		// First, stops driving.
+		this.stopDriving();
+		
+		// Creates the L3 City Chauffer driving control and registers it.
+		L3_CityChauffer drivingService = new L3_CityChauffer(context, "L3_CityChauffer");
+		drivingService.registerThing();
+		
+		// Obtains the registered control and configures it.
+		IL3_CityChauffer theL3CityChaufferService = OSGiUtils.getService(context, IL3_CityChauffer.class);
+		theL3CityChaufferService.setHumanSensors("HumanSensors");
+		theL3CityChaufferService.setRoadSensor("RoadSensor");
+		theL3CityChaufferService.setEngine("Engine");
+		theL3CityChaufferService.setSteering("Steering");
+		theL3CityChaufferService.setFrontDistanceSensor("FrontDistanceSensor");
+		theL3CityChaufferService.setRearDistanceSensor("RearDistanceSensor");
+		theL3CityChaufferService.setRightDistanceSensor("RightDistanceSensor");
+		theL3CityChaufferService.setLeftDistanceSensor("LeftDistanceSensor");
+		theL3CityChaufferService.setRightLineSensor("RightLineSensor");
+		theL3CityChaufferService.setLeftLineSensor("LeftLineSensor");
+		
+		theL3CityChaufferService.setReferenceSpeed(L3_CityChauffer.DEFAULT_REFERENCE_SPEED);
+		theL3CityChaufferService.setLongitudinalSecurityDistance(L3_CityChauffer.DEFAULT_LONGITUDINAL_SECURITY_DISTANCE);
+		theL3CityChaufferService.setLateralSecurityDistance(L3_CityChauffer.DEFAULT_LATERAL_SECURITY_DISTANCE);
+
+		theL3CityChaufferService.setNotificationService("NotificationService");		
+
+		theL3CityChaufferService.setFallbackPlan("EmergencyFallbackPlan");
+		
+		// Starts driving with L3 level.
+		theL3CityChaufferService.startDriving();
 		
 		return this;
 	}
