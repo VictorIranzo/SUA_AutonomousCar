@@ -116,4 +116,9 @@ public class HumanSensors extends Thing implements IHumanSensors {
 	public void setIsWorking(boolean isWorking) {
 		this.isWorking = isWorking;
 	}
+
+	@Override
+	public boolean isDriverAttending() {
+		return this.areTheHandsOnTheWheel() && this.getFaceStatus() == EFaceStatus.LOOKING_FORWARD && this.isDriverSeatOccupied();		
+	}
 }
