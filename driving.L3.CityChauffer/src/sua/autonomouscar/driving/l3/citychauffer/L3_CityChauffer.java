@@ -39,31 +39,14 @@ public class L3_CityChauffer extends L3_DrivingService implements IL3_CityChauff
 	
 	@Override
 	public IDrivingService performTheDrivingFunction() {
-		
-		// L3 city chauffer
-		
-		// Comprobamos que NO podemos mantener la conducción en nivel 3 de autonomia
+		// ADS_L3-1.
 		if ( this.getRoadSensor().getRoadType() == ERoadType.OFF_ROAD || this.getRoadSensor().getRoadType() == ERoadType.STD_ROAD ) {
-			// No podemos seguir conduciendo de manera autónoma
 			this.debugMessage("Cannot drive in L3 Autonomy level ...");
-			this.getNotificationService().notify("Cannot drive in L3 Autonomy level ...");
+			this.getNotificationService().notify("Cannot drive in L3 Autonomy level ... Changing to L2 level.");
 			
-			// Realizamos TakeOver (devolver el control al conductor) si está preparado ...
-			if ( this.getHumanSensors().getFaceStatus() == EFaceStatus.LOOKING_FORWARD &&
-				 this.getHumanSensors().areTheHandsOnTheWheel() &&
-				 this.getHumanSensors().isDriverSeatOccupied() ) {
-
-				this.debugMessage("The driver is ready to TakeOver ...");
-				this.getNotificationService().notify("The driver is ready to TakeOver ...");
-				this.performTheTakeOver();
-				
-			} else {
-				// ... o si no podemos, activamos el Fallback Plan
-				this.debugMessage("Activating the Fallback Plan ...");
-				this.activateTheFallbackPlan();
-			}
+			this.changeToL2Driving();
 			
-			return this;
+			return this;	
 		}
 
 		//

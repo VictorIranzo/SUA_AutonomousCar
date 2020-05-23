@@ -20,6 +20,7 @@ import sua.autonomouscar.infrastructure.devices.Engine;
 import sua.autonomouscar.infrastructure.devices.Steering;
 import sua.autonomouscar.infrastructure.driving.L3_DrivingService;
 import sua.autonomouscar.interfaces.EFaceStatus;
+import sua.autonomouscar.interfaces.ERoadStatus;
 import sua.autonomouscar.interfaces.ERoadType;
 
 public class L3_HighwayChauffer extends L3_DrivingService implements IL3_HighwayChauffer {
@@ -47,20 +48,21 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 	
 	
 	@Override
-	public IDrivingService performTheDrivingFunction() {
-		
-		// L3 highway chauffer
-		
-		// Comprobamos que NO podemos mantener la conducción en nivel 3 de autonomia
+	public IDrivingService performTheDrivingFunction() {	
+		// ADS_L3-1.
 		if ( this.getRoadSensor().getRoadType() == ERoadType.OFF_ROAD || this.getRoadSensor().getRoadType() == ERoadType.STD_ROAD ) {
-			// No podemos seguir conduciendo de manera autónoma
 			this.debugMessage("Cannot drive in L3 Autonomy level ...");
-			this.getNotificationService().notify("Cannot drive in L3 Autonomy level ... Se cambia a nivel de autonom�a L2.");
+			this.getNotificationService().notify("Cannot drive in L3 Autonomy level ... Changing to L2 level.");
 			
-			// ADS_L3-1.
 			this.changeToL2Driving();
 			
 			return this;
+		}
+		
+		// ADS_L3-1.
+		if (this.getRoadSensor().getRoadStatus() == ERoadStatus.COLLAPSED || this.getRoadSensor().getRoadStatus() == ERoadStatus.JAM)
+		{
+			
 		}
 
 		//
