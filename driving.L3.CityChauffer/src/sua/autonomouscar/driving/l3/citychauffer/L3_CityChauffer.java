@@ -2,6 +2,7 @@ package sua.autonomouscar.driving.l3.citychauffer;
 
 import org.osgi.framework.BundleContext;
 
+import sua.autonomouscar.devices.interfaces.IDistanceSensor;
 import sua.autonomouscar.devices.interfaces.ISpeedometer;
 import sua.autonomouscar.driving.defaultvalues.*;
 import sua.autonomouscar.driving.interfaces.IDrivingService;
@@ -17,6 +18,7 @@ import sua.autonomouscar.infrastructure.driving.L3_DrivingService;
 import sua.autonomouscar.interfaces.EFaceStatus;
 import sua.autonomouscar.interfaces.ERoadStatus;
 import sua.autonomouscar.interfaces.ERoadType;
+import sua.autonomouscar.interfaces.IIdentifiable;
 
 public class L3_CityChauffer extends L3_DrivingService implements IL3_CityChauffer {
 	public L3_CityChauffer(BundleContext context, String id) {
@@ -59,6 +61,127 @@ public class L3_CityChauffer extends L3_DrivingService implements IL3_CityChauff
 			}
 			
 			return this;	
+		}
+		
+		// ADS_L3-6.
+		if (!this.getHumanSensors().isWorking())
+		{
+			if (this.getHumanSensors().isDriverAttending())
+			{
+				this.debugMessage("Changing to L2 Driving due to a fail in human sensors ...");
+				this.getNotificationService().notify("Changing to L2 Driving due to a fail in human sensors ...");
+				
+				this.changeToL2Driving();
+			}
+			else
+			{
+				this.debugMessage("Activating the Fallback Plan due to a fail in human sensors ...");
+				this.activateTheFallbackPlan();
+			}
+			
+			return this;
+		}
+				
+		if (!this.getLeftLineSensor().isWorking() || !this.getRightLineSensor().isWorking())
+		{
+			if (this.getHumanSensors().isDriverAttending())
+			{
+				this.debugMessage("Take over due to a fail in line sensor ...");
+				this.getNotificationService().notify("Take over due to a fail in line sensor ...");
+				
+				this.performTheTakeOver();
+			}
+			else
+			{
+				this.debugMessage("Activating the Fallback Plan due to a fail in line sensor ...");
+				this.activateTheFallbackPlan();
+			}
+			
+			return this;
+		}
+		
+		if (!this.getRoadSensor().isWorking())
+		{
+			if (this.getHumanSensors().isDriverAttending())
+			{
+				this.debugMessage("Take over due to a fail in road sensor ...");
+				this.getNotificationService().notify("Take over due to a fail in road sensor ...");
+				
+				this.performTheTakeOver();
+			}
+			else
+			{
+				this.debugMessage("Activating the Fallback Plan due to a fail in road sensor ...");
+				this.activateTheFallbackPlan();
+			}
+			
+			return this;
+		}
+		
+		// Quizás cada sensor pueda monitorizarse de forma individual.
+		if (!this.getFrontDistanceSensor().isWorking() || !this.getRearDistanceSensor().isWorking()
+			|| !this.getRightDistanceSensor().isWorking() || !this.getLeftDistanceSensor().isWorking())
+		{
+			boolean areLIDARSensors = this.getFrontDistanceSensor().getClass().getName().contains("LIDAR");
+			
+			// No hay un sensor mejor para usar, ya que si se está usando este significa que los otros
+			// también están rotos. Por tanto, tenemos que realizar un Take Over o el Fallback plan según
+			// la atención del conductor.
+			if (areLIDARSensors)
+			{
+				if (this.getHumanSensors().isDriverAttending())
+				{
+					this.debugMessage("Take over due to a fail in distance sensor ...");
+					this.getNotificationService().notify("Take over due to a fail in distance sensor ...");
+					
+					this.performTheTakeOver();
+				}
+				else
+				{
+					this.debugMessage("Activating the Fallback Plan due to a fail in distance sensor ...");
+					this.activateTheFallbackPlan();
+				}
+			}
+			else
+			{
+				// Comprobamos si los sensores LIDAR están operativos.
+				IDistanceSensor LIDAR_FrontDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=LIDAR-FrontDistanceSensor)");
+				IDistanceSensor LIDAR_RearDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=LIDAR-RearDistanceSensor)");
+				IDistanceSensor LIDAR_RightDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=LIDAR-RightDistanceSensor)");
+				IDistanceSensor LIDAR_LeftDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=LIDAR-LeftDistanceSensor)");
+			
+			    boolean isWorkingLIDAR = LIDAR_FrontDistanceSensor.isWorking() && LIDAR_RearDistanceSensor.isWorking() 
+		    		&& LIDAR_RightDistanceSensor.isWorking() && LIDAR_LeftDistanceSensor.isWorking();
+			    
+			    // Reemplazamos los sensores por los LIDAR.
+			    if (isWorkingLIDAR)
+			    {
+					this.debugMessage("Replacing distance sensors by LIDAR...");
+					this.getNotificationService().notify("Replacing distance sensors by LIDAR...");
+					
+			    	this.setFrontDistanceSensor("LIDAR_FrontDistanceSensor");
+			    	this.setRearDistanceSensor("LIDAR_RearDistanceSensor");
+			    	this.setRightDistanceSensor("LIDAR_RightDistanceSensor");
+			    	this.setLeftDistanceSensor("LIDAR_LeftDistanceSensor");
+			    }
+			    else
+			    {
+					if (this.getHumanSensors().isDriverAttending())
+					{
+						this.debugMessage("Take over due to a fail in distance sensor ...");
+						this.getNotificationService().notify("Take over due to a fail in distance sensor ...");
+						
+						this.performTheTakeOver();
+					}
+					else
+					{
+						this.debugMessage("Activating the Fallback Plan due to a fail in distance sensor ...");
+						this.activateTheFallbackPlan();
+					}
+			    }
+			}
+			
+			return this;
 		}
 		
 		//
