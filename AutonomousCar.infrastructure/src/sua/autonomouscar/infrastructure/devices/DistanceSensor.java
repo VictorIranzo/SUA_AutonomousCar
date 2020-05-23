@@ -33,7 +33,7 @@ public class DistanceSensor extends Thing implements IDistanceSensor {
 
 	@Override
 	public boolean isWorking() {
-		return false;
+		return this.isWorking;
 	}
 
 	@Override

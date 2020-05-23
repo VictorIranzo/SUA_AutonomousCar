@@ -46,7 +46,7 @@ public class RoadSensor extends Thing implements IRoadSensor {
 
 	@Override
 	public boolean isWorking() {
-		return false;
+		return this.isWorking;
 	}
 
 	@Override

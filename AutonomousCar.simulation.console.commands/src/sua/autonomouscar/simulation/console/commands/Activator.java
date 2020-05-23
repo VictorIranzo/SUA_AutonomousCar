@@ -25,10 +25,10 @@ public class Activator implements BundleActivator {
 		props.put("osgi.command.function", new String[] { 
 				
 				//
-				// CONFIGURACIÓN 
+				// CONFIGURACIÃ“N 
 				//
 				
-					//  configure : realiza una configuración inicial de servicios y 
+					//  configure : realiza una configuraciÃ³n inicial de servicios y 
 					//    dispositivos (de prueba)
 					//
 					//   Modo uso
@@ -36,7 +36,7 @@ public class Activator implements BundleActivator {
 					//
 					"configure", 					
 					
-					//   show : muestra la configuración actual de conducción
+					//   show : muestra la configuraciÃ³n actual de conducciÃ³n
 					//
 					//   Modo uso
 					//		configure
@@ -44,14 +44,14 @@ public class Activator implements BundleActivator {
 					"show", 						
 				
 					//
-				// SIMULACIÓN LECTURAS DE SENSORES
+				// SIMULACIÃ“N LECTURAS DE SENSORES
 				//
 					//  line : sensores de carril (LineSensor)
 					//
 					//	Modo uso
 					//		line [ right | left ]  [ true | false ]
 					//
-					//  Ejemplo: detección de línea derecha de carril
+					//  Ejemplo: detecciÃ³n de lÃ­nea derecha de carril
 					//		line right true
 					//
 					"line", 
@@ -71,27 +71,27 @@ public class Activator implements BundleActivator {
 					//  Modo uso
 					//		lidar [ front | rear | left | right ] valor-distancia
 					//
-					//  Ejemplo: distancia a obstáculo en lateral izquierdo de 70 cms
+					//  Ejemplo: distancia a obstÃ¡culo en lateral izquierdo de 70 cms
 					//		lidar left 70
 					//
 					"lidar",	
 				
 
 				//	
-				// PARÁMETROS DE CONTEXTO
+				// PARÃ�METROS DE CONTEXTO
 				//	
-					//  driver : situación del conductor. Permite varios usos para
-					//    indicar la situación de la cara (face) y las manos en el
+					//  driver : situaciÃ³n del conductor. Permite varios usos para
+					//    indicar la situaciÃ³n de la cara (face) y las manos en el
 					//    volante
 					//
 					//  Modo uso
 					//		driver face [ looking_forward | distracted | sleeping ]
 					//		driver hands [ on-wheel | off-wheel ]
 					//
-					//  Ejemplo: conductor distraído
+					//  Ejemplo: conductor distraÃ­do
 					//		driver face distracted
 					//
-					//  Ejemplo: conductor distraído
+					//  Ejemplo: conductor distraÃ­do
 					//		driver hands on-wheel
 					//
 					"driver", 
@@ -110,7 +110,7 @@ public class Activator implements BundleActivator {
 					//
 					//  Modo uso
 					//		road type [ std | highway | off-road | city ]
-					//		road status [ fluid | jam | collapsed ]
+					//		road status [ fluid | jam |Â collapsed ]
 					//
 					//  Ejemplo: circulamos por ciudad
 					//		road type city
@@ -120,7 +120,7 @@ public class Activator implements BundleActivator {
 					"road",
 					
 				//	
-				// CONTROL MANUAL DEL VEHÍCULO
+				// CONTROL MANUAL DEL VEHÃ�CULO
 				//	
 				
 					// engine : control de las revoluciones (rpm) del motor
@@ -136,7 +136,7 @@ public class Activator implements BundleActivator {
 					//
 					"engine", 
 					
-					// steering : control de dirección, a izquierda o derecha
+					// steering : control de direcciÃ³n, a izquierda o derecha
 					//
 					//  Modo uso
 					//		steering [ left | right ] grados-giro
@@ -144,23 +144,23 @@ public class Activator implements BundleActivator {
 					//  Ejemplo: Giramos 20 grados a la derecha
 					//		steering right 20
 					//
-					"steering", 			// controlar manualmente las funciones primarias de conducción
+					"steering", 			// controlar manualmente las funciones primarias de conducciÃ³n
 					
 					
 					
 				//	
-				// FUNCIONES DE CONDUCCIÓN
+				// FUNCIONES DE CONDUCCIÃ“N
 				//	
 
-					// driving : activa un nivel de conducción autónoma
+					// driving : activa un nivel de conducciÃ³n autÃ³noma
 					//
 					//  Modo uso
 					//		driving [ l0 | l1 | l2 | l3 ]
 					//
 					//  Ejemplo: Activar nivel de autonomia 3
 					//		driving l3
-					//      * NOTA: en función del tipo de vía y su estado
-					//          se activará el servicio adecuado para el
+					//      * NOTA: en funciÃ³n del tipo de vÃ­a y su estado
+					//          se activarÃ¡ el servicio adecuado para el
 					//          nivel indicado
 					//
 					//
@@ -170,14 +170,16 @@ public class Activator implements BundleActivator {
 				// SIMULADOR
 				// 
 					
-					// next ó n : da un paso de simulación manual
+					// next Ã³ n : da un paso de simulaciÃ³n manual
 					//
 					//  Modo uso
 					//		next
 					//		n
 					//
 					"next",
-					"n"
+					"n",
+					
+					"working"
 		});
 		
 		this.commandProvReg = context.registerService(MyCommandProvider.class.getName(),

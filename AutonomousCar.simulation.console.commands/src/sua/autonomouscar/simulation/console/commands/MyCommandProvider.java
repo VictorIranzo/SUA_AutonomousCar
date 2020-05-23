@@ -40,6 +40,7 @@ public class MyCommandProvider {
 			System.out.println(String.format("|    Driver Face: %s", hs.getFaceStatus().name()));
 			System.out.println(String.format("|    Driver Seat: %s", hs.isDriverSeatOccupied()));
 			System.out.println(String.format("|   Copilot Seat: %s", hs.isCopilotSeatOccupied()));
+			System.out.println(String.format("|        Working: %s", hs.isWorking()));
 			System.out.println(" - - - - - - - - - - - - - - - - - - - - - - - -\n");
 		}
 		
@@ -50,6 +51,7 @@ public class MyCommandProvider {
 			System.out.println(" - - - - - - - - - - - - - - - - - - - - - - - -");
 			System.out.println(String.format("|      Road Type: %s", rs.getRoadType()));
 			System.out.println(String.format("|    Road Status: %s", rs.getRoadStatus()));
+			System.out.println(String.format("|        Working: %s", rs.isWorking()));
 			System.out.println(" - - - - - - - - - - - - - - - - - - - - - - - -\n");
 		}
 
@@ -122,7 +124,10 @@ public class MyCommandProvider {
 			String sDistance = (distance != DistanceSensor.MAX_DISTANCE ? String.valueOf(distance) : "∞");
 			System.out.println(String.format("|\t Left: %s cms", sDistance));
 		}
+		
+	    boolean isWorking = frontDistanceSensor.isWorking() && rearDistanceSensor.isWorking() && rightDistanceSensor.isWorking() && leftDistanceSensor.isWorking();
 
+		System.out.println(String.format("|\tWorking: %s", isWorking));
 
 		System.out.println("|  - - - - - - - - - - - - - - - - - - - - - -");
 		System.out.println("|  LIDAR");
@@ -137,7 +142,8 @@ public class MyCommandProvider {
 			int distance = LIDAR_RearDistanceSensor.getDistance();
 			String sDistance = (distance != DistanceSensor.MAX_DISTANCE ? String.valueOf(distance) : "∞");
 			System.out.println(String.format("|\t Rear: %s cms", sDistance));
-		}		IDistanceSensor LIDAR_RightDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=LIDAR-RightDistanceSensor)");
+		}		
+		IDistanceSensor LIDAR_RightDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=LIDAR-RightDistanceSensor)");
 		if ( LIDAR_RightDistanceSensor != null ) {
 			int distance = LIDAR_RightDistanceSensor.getDistance();
 			String sDistance = (distance != DistanceSensor.MAX_DISTANCE ? String.valueOf(distance) : "∞");
@@ -150,6 +156,11 @@ public class MyCommandProvider {
 			System.out.println(String.format("|\t Left: %s cms", sDistance));
 		}
 
+	    boolean isWorkingLIDAR = LIDAR_FrontDistanceSensor.isWorking() && LIDAR_RearDistanceSensor.isWorking() 
+    		&& LIDAR_RightDistanceSensor.isWorking() && LIDAR_LeftDistanceSensor.isWorking();
+		
+		System.out.println(String.format("|\tWorking: %s", isWorkingLIDAR));
+	    
 		System.out.println("|  - - - - - - - - - - - - - - - - - - - - - -");
 		System.out.println("|  LINE SENSORS");
 		ILineSensor rightLineSensor = OSGiUtils.getService(context, ILineSensor.class, "(" + IIdentifiable.ID + "=RightLineSensor)");
@@ -161,9 +172,11 @@ public class MyCommandProvider {
 			System.out.println(String.format("|\t Left: %b", leftLineSensor.isLineDetected()));
 		}
 
+	    boolean isWorkingLine = rightLineSensor.isWorking() && leftLineSensor.isWorking();
+	    
+		System.out.println(String.format("|\tWorking: %s", isWorkingLine));
 
 		System.out.println(" - - - - - - - - - - - - - - - - - - - - - - - -\n");
-
 	}
 	
 	public void configure() {
@@ -364,6 +377,60 @@ public class MyCommandProvider {
 		IDistanceSensor sensor = OSGiUtils.getService(context, IDistanceSensor.class, String.format("(id=%s)", sensorId));
 		if ( sensor != null )
 			sensor.setDistance(distance);
+	}
+	
+	public void working(String sensor, boolean value)
+	{
+		switch(sensor)
+		{
+			case "human":
+				IHumanSensors humanSensor = OSGiUtils.getService(context, IHumanSensors.class, String.format("(id=%s)", "HumanSensors"));
+				
+				if (humanSensor != null) humanSensor.setIsWorking(value);
+			break;
+			case "line":
+				ILineSensor rightLineSensor = OSGiUtils.getService(context, ILineSensor.class, "(" + IIdentifiable.ID + "=RightLineSensor)");			
+				if (rightLineSensor != null) rightLineSensor.setIsWorking(value);
+				
+				ILineSensor leftLineSensor = OSGiUtils.getService(context, ILineSensor.class, "(" + IIdentifiable.ID + "=LeftLineSensor)");
+				if (leftLineSensor != null) leftLineSensor.setIsWorking(value);
+
+			break;
+			case "road":
+				IRoadSensor rs = OSGiUtils.getService(context, IRoadSensor.class);
+				
+				if (rs != null) rs.setIsWorking(value);
+
+				break;
+			case "lidar":
+				IDistanceSensor LIDAR_FrontDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=LIDAR-FrontDistanceSensor)");
+				if (LIDAR_FrontDistanceSensor != null) LIDAR_FrontDistanceSensor.setIsWorking(value);
+			
+				IDistanceSensor LIDAR_RearDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=LIDAR-RearDistanceSensor)");
+				if (LIDAR_RearDistanceSensor != null) LIDAR_RearDistanceSensor.setIsWorking(value);
+
+				IDistanceSensor LIDAR_RightDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=LIDAR-RightDistanceSensor)");
+				if (LIDAR_RightDistanceSensor != null) LIDAR_RightDistanceSensor.setIsWorking(value);
+			
+				IDistanceSensor LIDAR_LeftDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=LIDAR-LeftDistanceSensor)");
+				if (LIDAR_LeftDistanceSensor != null) LIDAR_LeftDistanceSensor.setIsWorking(value);
+
+				break;
+			case "distance":
+				IDistanceSensor FrontDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=FrontDistanceSensor)");
+				if (FrontDistanceSensor != null) FrontDistanceSensor.setIsWorking(value);
+			
+				IDistanceSensor RearDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=RearDistanceSensor)");
+				if (RearDistanceSensor != null) RearDistanceSensor.setIsWorking(value);
+
+				IDistanceSensor RightDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=RightDistanceSensor)");
+				if (RightDistanceSensor != null) RightDistanceSensor.setIsWorking(value);
+			
+				IDistanceSensor LeftDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=LeftDistanceSensor)");
+				if (LeftDistanceSensor != null) LeftDistanceSensor.setIsWorking(value);
+
+				break;
+		}
 	}
 	
 	public void next() {

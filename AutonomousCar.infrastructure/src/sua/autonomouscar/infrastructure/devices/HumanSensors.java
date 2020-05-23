@@ -109,7 +109,7 @@ public class HumanSensors extends Thing implements IHumanSensors {
 
 	@Override
 	public boolean isWorking() {
-		return false;
+		return this.isWorking;
 	}
 
 	@Override

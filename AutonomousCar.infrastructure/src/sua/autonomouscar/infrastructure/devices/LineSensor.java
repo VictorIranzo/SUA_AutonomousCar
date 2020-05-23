@@ -30,7 +30,7 @@ public class LineSensor extends Thing implements ILineSensor {
 
 	@Override
 	public boolean isWorking() {
-		return false;
+		return this.isWorking;
 	}
 
 	@Override
