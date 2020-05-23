@@ -4,6 +4,7 @@ import org.osgi.framework.BundleContext;
 
 import sua.autonomouscar.devices.interfaces.IHumanSensors;
 import sua.autonomouscar.devices.interfaces.IRoadSensor;
+import sua.autonomouscar.driving.interfaces.IDrivingService;
 import sua.autonomouscar.driving.interfaces.IFallbackPlan;
 import sua.autonomouscar.driving.interfaces.IL3_DrivingService;
 import sua.autonomouscar.infrastructure.OSGiUtils;
@@ -16,6 +17,8 @@ public abstract class L3_DrivingService extends L2_DrivingService implements IL3
 	protected String humanSensors = null;
 	protected String roadSensor = null;
 	protected String fallbackPlan = null;
+	
+	protected String l2Level = null;
 	
 	protected int lateralSecurityDistance = 1;
 	
@@ -78,4 +81,6 @@ public abstract class L3_DrivingService extends L2_DrivingService implements IL3
 
 		return this;
 	}
+	
+	public abstract IL3_DrivingService changeToL2Driving();
 }

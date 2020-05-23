@@ -4,7 +4,17 @@ import org.osgi.framework.BundleContext;
 
 import sua.autonomouscar.devices.interfaces.ISpeedometer;
 import sua.autonomouscar.driving.interfaces.IDrivingService;
+import sua.autonomouscar.driving.interfaces.IEmergencyFallbackPlan;
+import sua.autonomouscar.driving.interfaces.IL0_ManualDriving;
+import sua.autonomouscar.driving.interfaces.IL1_AssistedDriving;
+import sua.autonomouscar.driving.interfaces.IL2_AdaptiveCruiseControl;
+import sua.autonomouscar.driving.interfaces.IL2_LaneKeepingAssist;
+import sua.autonomouscar.driving.interfaces.IL3_CityChauffer;
+import sua.autonomouscar.driving.interfaces.IL3_DrivingService;
 import sua.autonomouscar.driving.interfaces.IL3_HighwayChauffer;
+import sua.autonomouscar.driving.interfaces.IL3_TrafficJamChauffer;
+import sua.autonomouscar.driving.interfaces.IParkInTheRoadShoulderFallbackPlan;
+import sua.autonomouscar.driving.l2.acc.L2_AdaptiveCruiseControl;
 import sua.autonomouscar.infrastructure.OSGiUtils;
 import sua.autonomouscar.infrastructure.devices.Engine;
 import sua.autonomouscar.infrastructure.devices.Steering;
@@ -45,22 +55,10 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 		if ( this.getRoadSensor().getRoadType() == ERoadType.OFF_ROAD || this.getRoadSensor().getRoadType() == ERoadType.STD_ROAD ) {
 			// No podemos seguir conduciendo de manera autónoma
 			this.debugMessage("Cannot drive in L3 Autonomy level ...");
-			this.getNotificationService().notify("Cannot drive in L3 Autonomy level ...");
+			this.getNotificationService().notify("Cannot drive in L3 Autonomy level ... Se cambia a nivel de autonom�a L2.");
 			
-			// Realizamos TakeOver (devolver el control al conductor) si está preparado ...
-			if ( this.getHumanSensors().getFaceStatus() == EFaceStatus.LOOKING_FORWARD &&
-				 this.getHumanSensors().areTheHandsOnTheWheel() &&
-				 this.getHumanSensors().isDriverSeatOccupied() ) {
-
-				this.debugMessage("The driver is ready to TakeOver ...");
-				this.getNotificationService().notify("The driver is ready to TakeOver ...");
-				this.performTheTakeOver();
-				
-			} else {
-				// ... o si no podemos, activamos el Fallback Plan
-				this.debugMessage("Activating the Fallback Plan ...");
-				this.activateTheFallbackPlan();
-			}
+			// ADS_L3-1.
+			this.changeToL2Driving();
 			
 			return this;
 		}
@@ -199,7 +197,27 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 		return this;
 	}
 
+	@Override
+	public IL3_DrivingService changeToL2Driving() {
+		// First, stops driving.
+		this.stopDriving();
+		
+		// Creates the L2 driving control and registers it.
+		L2_AdaptiveCruiseControl drivingService = new L2_AdaptiveCruiseControl(context, "L2_AdaptiveCruiseControl");
+		drivingService.registerThing();
 
+		// Obtains the registered control and configures it.
+		IL2_AdaptiveCruiseControl theL2AdaptiveCruiseControlService = OSGiUtils.getService(context, IL2_AdaptiveCruiseControl.class);
+		theL2AdaptiveCruiseControlService.setEngine("Engine");
+		theL2AdaptiveCruiseControlService.setFrontDistanceSensor("FrontDistanceSensor");
+		
+		theL2AdaptiveCruiseControlService.setLongitudinalSecurityDistance(L2_AdaptiveCruiseControl.DEFAULT_LONGITUDINAL_SECURITY_DISTANCE);
 
-
+		theL2AdaptiveCruiseControlService.setNotificationService("NotificationService");		
+		
+		// Starts driving with L2 level.
+		theL2AdaptiveCruiseControlService.startDriving();
+		
+		return this;
+	}
 }

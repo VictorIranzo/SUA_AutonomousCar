@@ -19,3 +19,4 @@ Import-Package: org.osgi.framework,
  sua.autonomouscar.interfaces,
  sua.autonomouscar.simulation
 Bundle-Activator: sua.autonomouscar.simulation.console.commands.Activator
+Export-Package: sua.autonomouscar.simulation.console.commands

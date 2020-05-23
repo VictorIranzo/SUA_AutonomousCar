@@ -4,7 +4,10 @@ import org.osgi.framework.BundleContext;
 
 import sua.autonomouscar.devices.interfaces.ISpeedometer;
 import sua.autonomouscar.driving.interfaces.IDrivingService;
+import sua.autonomouscar.driving.interfaces.IL2_AdaptiveCruiseControl;
+import sua.autonomouscar.driving.interfaces.IL3_DrivingService;
 import sua.autonomouscar.driving.interfaces.IL3_TrafficJamChauffer;
+import sua.autonomouscar.driving.l2.acc.L2_AdaptiveCruiseControl;
 import sua.autonomouscar.infrastructure.OSGiUtils;
 import sua.autonomouscar.infrastructure.devices.Engine;
 import sua.autonomouscar.infrastructure.devices.Steering;
@@ -197,7 +200,27 @@ public class L3_TrafficJamChauffer extends L3_DrivingService implements IL3_Traf
 		return this;
 	}
 
+	@Override
+	public IL3_DrivingService changeToL2Driving() {
+		// First, stops driving.
+		this.stopDriving();
+		
+		// Creates the L2 driving control and registers it.
+		L2_AdaptiveCruiseControl drivingService = new L2_AdaptiveCruiseControl(context, "L2_AdaptiveCruiseControl");
+		drivingService.registerThing();
 
+		// Obtains the registered control and configures it.
+		IL2_AdaptiveCruiseControl theL2AdaptiveCruiseControlService = OSGiUtils.getService(context, IL2_AdaptiveCruiseControl.class);
+		theL2AdaptiveCruiseControlService.setEngine("Engine");
+		theL2AdaptiveCruiseControlService.setFrontDistanceSensor("FrontDistanceSensor");
+		
+		theL2AdaptiveCruiseControlService.setLongitudinalSecurityDistance(L2_AdaptiveCruiseControl.DEFAULT_LONGITUDINAL_SECURITY_DISTANCE);
 
-
+		theL2AdaptiveCruiseControlService.setNotificationService("NotificationService");		
+		
+		// Starts driving with L2 level.
+		theL2AdaptiveCruiseControlService.startDriving();
+		
+		return this;
+	}
 }
