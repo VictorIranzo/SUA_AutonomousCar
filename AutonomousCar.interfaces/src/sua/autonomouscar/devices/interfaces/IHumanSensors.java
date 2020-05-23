@@ -9,6 +9,9 @@ public interface IHumanSensors {
 	public EFaceStatus getFaceStatus();
 	public boolean areTheHandsOnTheWheel();
 	
+	public boolean isWorking();
+	public void setIsWorking(boolean isWorking);
+	
 	public IHumanSensors setFaceStatus(EFaceStatus status); 		// for simulation purposes only
 	public IHumanSensors setDriverSeatOccupancy(boolean value); 	// for simulation purposes only
 	public IHumanSensors setCopilotSeatOccupancy(boolean value); 	// for simulation purposes only

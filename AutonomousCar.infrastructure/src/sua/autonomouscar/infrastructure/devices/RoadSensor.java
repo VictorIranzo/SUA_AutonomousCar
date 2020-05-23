@@ -12,6 +12,8 @@ public class RoadSensor extends Thing implements IRoadSensor {
 	public static final String ROAD_TYPE = "road-type";
 	public static final String ROAD_STATUS = "road-status";
 	
+	private boolean isWorking = true;
+	
 	public RoadSensor(BundleContext context, String id) {
 		super(context, id);
 		this.addImplementedInterface(IRoadSensor.class.getName());
@@ -42,6 +44,13 @@ public class RoadSensor extends Thing implements IRoadSensor {
 	}
 	
 
+	@Override
+	public boolean isWorking() {
+		return false;
+	}
 
-
+	@Override
+	public void setIsWorking(boolean isWorking) {
+		this.isWorking = isWorking;
+	}
 }

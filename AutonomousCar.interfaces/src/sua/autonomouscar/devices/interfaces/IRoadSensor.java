@@ -10,5 +10,7 @@ public interface IRoadSensor {
 	
 	public IRoadSensor setRoadType(ERoadType type);  // for simulation purposes only
 	public IRoadSensor setRoadStatus(ERoadStatus s); // for simulation purposes only
-	
+
+	public boolean isWorking();
+	public void setIsWorking(boolean isWorking);
 }

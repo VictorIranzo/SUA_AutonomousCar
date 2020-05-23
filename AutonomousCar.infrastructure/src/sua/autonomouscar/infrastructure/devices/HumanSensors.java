@@ -16,6 +16,8 @@ public class HumanSensors extends Thing implements IHumanSensors {
 	protected ISeatSensor copilotSeatSensor = null;
 	protected IHandsOnWheelSensor howSensor = null;
 	
+	private boolean isWorking = true;
+	
 	public HumanSensors(BundleContext context, String id) {
 		super(context, id);
 		this.addImplementedInterface(IHumanSensors.class.getName());
@@ -105,5 +107,13 @@ public class HumanSensors extends Thing implements IHumanSensors {
 		return this;
 	}
 
+	@Override
+	public boolean isWorking() {
+		return false;
+	}
 
+	@Override
+	public void setIsWorking(boolean isWorking) {
+		this.isWorking = isWorking;
+	}
 }

@@ -10,7 +10,9 @@ public class DistanceSensor extends Thing implements IDistanceSensor {
 	
 	public static final String DISTANCE = "distance";
 	public static final int MAX_DISTANCE = 99999;	// expressed in cms
-		
+	
+	private boolean isWorking = true;
+	
 	public DistanceSensor(BundleContext context, String id) {
 		super(context, id);
 		this.addImplementedInterface(IDistanceSensor.class.getName());
@@ -29,6 +31,13 @@ public class DistanceSensor extends Thing implements IDistanceSensor {
 		return this;
 	}
 
+	@Override
+	public boolean isWorking() {
+		return false;
+	}
 
-
+	@Override
+	public void setIsWorking(boolean isWorking) {
+		this.isWorking = isWorking;
+	}
 }

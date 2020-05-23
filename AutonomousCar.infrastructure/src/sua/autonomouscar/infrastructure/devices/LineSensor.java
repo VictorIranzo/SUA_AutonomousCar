@@ -9,6 +9,8 @@ public class LineSensor extends Thing implements ILineSensor {
 	
 	public static final String DETECTION = "detection";
 	
+	private boolean isWorking = true;
+	
 	public LineSensor(BundleContext context, String id) {
 		super(context, id);
 		this.addImplementedInterface(ILineSensor.class.getName());
@@ -26,6 +28,13 @@ public class LineSensor extends Thing implements ILineSensor {
 		return this;
 	}
 
+	@Override
+	public boolean isWorking() {
+		return false;
+	}
 
-
+	@Override
+	public void setIsWorking(boolean isWorking) {
+		this.isWorking = isWorking;
+	}
 }
