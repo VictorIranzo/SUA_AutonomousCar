@@ -38,9 +38,7 @@ public class L3_TrafficJamChauffer extends L3_DrivingService implements IL3_Traf
 			this.debugMessage("Cannot drive in L3 Autonomy level ...");
 			this.getNotificationService().notify("Cannot drive in L3 Autonomy level ... Changing to L2 level.");
 			
-			this.changeToL2Driving();
-			
-			return this;	
+			this.changeToL2Driving();		
 		}
 		
 		// ADS_L3-4-1.
@@ -48,9 +46,7 @@ public class L3_TrafficJamChauffer extends L3_DrivingService implements IL3_Traf
 			this.debugMessage("Changing from L3 Traffic Jam Chauffer to Highway chauffer...");
 			this.getNotificationService().notify("Changing from L3 Traffic Jam Chauffer to Highway chauffer...");
 			
-			this.changeToL3HighwayDriving();
-			
-			return this;	
+			this.changeToL3HighwayDriving();	
 		}
 		
 		// ADS_L3-4-2.
@@ -58,9 +54,7 @@ public class L3_TrafficJamChauffer extends L3_DrivingService implements IL3_Traf
 			this.debugMessage("Changing to L3 City Chauffer...");
 			this.getNotificationService().notify("Changing to L3 City Chauffer...");
 			
-			this.changeToL3CityDriving();
-			
-			return this;	
+			this.changeToL3CityDriving();		
 		}
 		
 		// ADS_L3-6.
@@ -77,9 +71,7 @@ public class L3_TrafficJamChauffer extends L3_DrivingService implements IL3_Traf
 			{
 				this.debugMessage("Activating the Fallback Plan due to a fail in human sensors ...");
 				this.activateTheFallbackPlan();
-			}
-			
-			return this;
+			}		
 		}
 				
 		if (!this.getLeftLineSensor().isWorking() || !this.getRightLineSensor().isWorking())
@@ -95,9 +87,7 @@ public class L3_TrafficJamChauffer extends L3_DrivingService implements IL3_Traf
 			{
 				this.debugMessage("Activating the Fallback Plan due to a fail in line sensor ...");
 				this.activateTheFallbackPlan();
-			}
-			
-			return this;
+			}		
 		}
 		
 		if (!this.getRoadSensor().isWorking())
@@ -113,9 +103,7 @@ public class L3_TrafficJamChauffer extends L3_DrivingService implements IL3_Traf
 			{
 				this.debugMessage("Activating the Fallback Plan due to a fail in road sensor ...");
 				this.activateTheFallbackPlan();
-			}
-			
-			return this;
+			}		
 		}
 		
 		// Quizás cada sensor pueda monitorizarse de forma individual.
@@ -179,9 +167,7 @@ public class L3_TrafficJamChauffer extends L3_DrivingService implements IL3_Traf
 						this.activateTheFallbackPlan();
 					}
 			    }
-			}
-			
-			return this;
+			}		
 		}
 
 		//
