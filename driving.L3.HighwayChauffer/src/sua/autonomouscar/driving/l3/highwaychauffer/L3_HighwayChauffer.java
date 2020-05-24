@@ -23,7 +23,36 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 	}	
 	
 	@Override
-	public IDrivingService performTheDrivingFunction() {	
+	public IDrivingService performTheDrivingFunction() {
+		// ADS-L3_7.
+		IFallbackPlan fallbackPlan = this.getFallbackPlan();
+		boolean isEmergencyPlanSet = fallbackPlan == null ? false : fallbackPlan.getClass().getName().equals(EmergencyFallbackPlan.class.getName());
+		
+		// Si está funcionando el plan de emergencia, intentamos cambiar al otro si el tipo de via es el correcto.
+		if (isEmergencyPlanSet && 
+				(this.getRoadSensor().getRoadType() == ERoadType.STD_ROAD || this.getRoadSensor().getRoadType() == ERoadType.HIGHWAY))
+		{
+			// Comprobamos primero si los sensores necesarios están funcionando.
+			if(this.getRightLineSensor().isWorking() && this.getRightDistanceSensor().isWorking())
+			{
+				this.debugMessage("Changing to Park in the Road Fallback plan.");
+
+				this.setFallbackPlan("ParkInTheRoadShoulderFallbackPlan");
+			}
+		}
+		
+		// Si el plan de emergencia es el de aparcar en la cuneta, comprobamos si los sensores están funcionando, y si no
+		// lo están haciendo, cambiamos al plan de emergencia.
+		if (!isEmergencyPlanSet)
+		{
+			if(!this.getRightLineSensor().isWorking() || !this.getRightDistanceSensor().isWorking())
+			{
+				this.debugMessage("Changing to Emergency plan.");
+
+				this.setFallbackPlan("EmergencyFallbackPlan");
+			}
+		}
+		
 		// ADS_L3-1.
 		if ( this.getRoadSensor().getRoadType() == ERoadType.OFF_ROAD || this.getRoadSensor().getRoadType() == ERoadType.STD_ROAD ) {
 			this.debugMessage("Cannot drive in L3 Autonomy level ...");
@@ -174,35 +203,6 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 			}
 			
 			return this;
-		}
-		
-		// ADS-L3_7.
-		IFallbackPlan fallbackPlan = this.getFallbackPlan();
-		boolean isEmergencyPlanSet = fallbackPlan == null ? false : fallbackPlan.getClass().getName().equals(EmergencyFallbackPlan.class.getName());
-		
-		// Si está funcionando el plan de emergencia, intentamos cambiar al otro si el tipo de via es el correcto.
-		if (isEmergencyPlanSet && 
-				(this.getRoadSensor().getRoadType() == ERoadType.STD_ROAD || this.getRoadSensor().getRoadType() == ERoadType.HIGHWAY))
-		{
-			// Comprobamos primero si los sensores necesarios están funcionando.
-			if(this.getRightLineSensor().isWorking() && this.getRightDistanceSensor().isWorking())
-			{
-				this.debugMessage("Changing to Park in the Road Fallback plan.");
-
-				this.setFallbackPlan("ParkInTheRoadShoulderFallbackPlan");
-			}
-		}
-		
-		// Si el plan de emergencia es el de aparcar en la cuneta, comprobamos si los sensores están funcionando, y si no
-		// lo están haciendo, cambiamos al plan de emergencia.
-		if (!isEmergencyPlanSet)
-		{
-			if(!this.getRightLineSensor().isWorking() || !this.getRightDistanceSensor().isWorking())
-			{
-				this.debugMessage("Changing to Emergency plan.");
-
-				this.setFallbackPlan("EmergencyFallbackPlan");
-			}
 		}
 		
 		//

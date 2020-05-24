@@ -36,6 +36,18 @@ public class L3_CityChauffer extends L3_DrivingService implements IL3_CityChauff
 	
 	@Override
 	public IDrivingService performTheDrivingFunction() {
+		// ADS-L3_7
+		// Asumimos que por el tipo de carretera, el tipo de fallback plan asociado es siempre el de emergencia.
+		IFallbackPlan fallbackPlan = this.getFallbackPlan();
+		boolean isEmergencyPlanSet = fallbackPlan == null ? false : fallbackPlan.getClass().getName().equals(EmergencyFallbackPlan.class.getName());
+		
+		if (!isEmergencyPlanSet)
+		{		
+			this.debugMessage("Changing to Emergency plan.");
+
+			this.setFallbackPlan("EmergencyFallbackPlan");
+		}
+		
 		// ADS_L3-1.
 		if (this.getRoadSensor().getRoadType() == ERoadType.OFF_ROAD || this.getRoadSensor().getRoadType() == ERoadType.STD_ROAD) {
 			this.debugMessage("Cannot drive in L3 Autonomy level ...");
@@ -185,18 +197,6 @@ public class L3_CityChauffer extends L3_DrivingService implements IL3_CityChauff
 			}
 			
 			return this;
-		}
-		
-		// ADS-L3_7
-		// Asumimos que por el tipo de carretera, el tipo de fallback plan asociado es siempre el de emergencia.
-		IFallbackPlan fallbackPlan = this.getFallbackPlan();
-		boolean isEmergencyPlanSet = fallbackPlan == null ? false : fallbackPlan.getClass().getName().equals(EmergencyFallbackPlan.class.getName());
-		
-		if (!isEmergencyPlanSet)
-		{		
-			this.debugMessage("Changing to Emergency plan.");
-
-			this.setFallbackPlan("EmergencyFallbackPlan");
 		}
 		
 		//

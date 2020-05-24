@@ -5,7 +5,9 @@ import org.osgi.framework.BundleContext;
 import sua.autonomouscar.devices.interfaces.IDistanceSensor;
 import sua.autonomouscar.devices.interfaces.ISpeedometer;
 import sua.autonomouscar.driving.defaultvalues.*;
+import sua.autonomouscar.driving.emergencyfallbackplan.EmergencyFallbackPlan;
 import sua.autonomouscar.driving.interfaces.IDrivingService;
+import sua.autonomouscar.driving.interfaces.IFallbackPlan;
 import sua.autonomouscar.driving.interfaces.IL2_AdaptiveCruiseControl;
 import sua.autonomouscar.driving.interfaces.IL3_CityChauffer;
 import sua.autonomouscar.driving.interfaces.IL3_DrivingService;
@@ -32,7 +34,36 @@ public class L3_TrafficJamChauffer extends L3_DrivingService implements IL3_Traf
 	
 	
 	@Override
-	public IDrivingService performTheDrivingFunction() {		
+	public IDrivingService performTheDrivingFunction() {
+		// ADS-L3_7.
+		IFallbackPlan fallbackPlan = this.getFallbackPlan();
+		boolean isEmergencyPlanSet = fallbackPlan == null ? false : fallbackPlan.getClass().getName().equals(EmergencyFallbackPlan.class.getName());
+		
+		// Si est· funcionando el plan de emergencia, intentamos cambiar al otro si el tipo de via es el correcto.
+		if (isEmergencyPlanSet && 
+				(this.getRoadSensor().getRoadType() == ERoadType.STD_ROAD || this.getRoadSensor().getRoadType() == ERoadType.HIGHWAY))
+		{
+			// Comprobamos primero si los sensores necesarios est·n funcionando.
+			if(this.getRightLineSensor().isWorking() && this.getRightDistanceSensor().isWorking())
+			{
+				this.debugMessage("Changing to Park in the Road Fallback plan.");
+
+				this.setFallbackPlan("ParkInTheRoadShoulderFallbackPlan");
+			}
+		}
+		
+		// Si el plan de emergencia es el de aparcar en la cuneta, comprobamos si los sensores est·n funcionando, y si no
+		// lo est·n haciendo, cambiamos al plan de emergencia.
+		if (!isEmergencyPlanSet)
+		{
+			if(!this.getRightLineSensor().isWorking() || !this.getRightDistanceSensor().isWorking())
+			{
+				this.debugMessage("Changing to Emergency plan.");
+
+				this.setFallbackPlan("EmergencyFallbackPlan");
+			}
+		}
+		
 		// ADS_L3-1.
 		if ( this.getRoadSensor().getRoadType() == ERoadType.OFF_ROAD || this.getRoadSensor().getRoadType() == ERoadType.STD_ROAD) {
 			this.debugMessage("Cannot drive in L3 Autonomy level ...");
@@ -183,7 +214,7 @@ public class L3_TrafficJamChauffer extends L3_DrivingService implements IL3_Traf
 			
 			return this;
 		}
-
+		
 		//
 		// Control de la funci√≥n primaria: MOVIMIENTO LONGITUDINAL
 		//
