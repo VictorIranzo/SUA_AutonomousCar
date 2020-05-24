@@ -26,12 +26,12 @@ public class L1_AssistedDriving extends L1_DrivingService implements IL1_Assiste
 		// ADS-1
 		if (this.getFrontDistanceSensor().getClass().getName().contains("LIDAR"))
 		{
-			// Comprobamos si el sensor de distancia dedicados están disponibles, para emplearlos.
+			// Comprobamos si el sensor de distancia dedicados estï¿½n disponibles, para emplearlos.
 			IDistanceSensor FrontDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=FrontDistanceSensor)");
 	
 		    boolean isWorkingDistanceSensor = FrontDistanceSensor.isWorking();
 		    
-		    // Según la especificación, solo se necesita el sensor frontal.
+		    // Segï¿½n la especificaciï¿½n, solo se necesita el sensor frontal.
 		    if (isWorkingDistanceSensor)
 		    {
 		    	this.setFrontDistanceSensor("FrontDistanceSensor");
@@ -41,6 +41,9 @@ public class L1_AssistedDriving extends L1_DrivingService implements IL1_Assiste
 		// ADS-2
 		if (!this.isWorking())
 		{
+			this.debugMessage("General fail. Changing to manual driving...");
+			this.getNotificationService().notify("General fail. Changing to manual driving...");
+
 			this.changeToL0Driving();
 			
 			return this;

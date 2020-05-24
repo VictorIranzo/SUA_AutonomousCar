@@ -27,7 +27,7 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 		// ADS-1
 		if (this.getFrontDistanceSensor().getClass().getName().contains("LIDAR"))
 		{
-			// Comprobamos si los sensores de distancia dedicados están disponibles, para emplearlos.
+			// Comprobamos si los sensores de distancia dedicados estï¿½n disponibles, para emplearlos.
 			IDistanceSensor FrontDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=FrontDistanceSensor)");
 			IDistanceSensor RearDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=RearDistanceSensor)");
 			IDistanceSensor RightDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=RightDistanceSensor)");
@@ -49,11 +49,11 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 		IFallbackPlan fallbackPlan = this.getFallbackPlan();
 		boolean isEmergencyPlanSet = fallbackPlan == null ? false : fallbackPlan.getClass().getName().equals(EmergencyFallbackPlan.class.getName());
 		
-		// Si está funcionando el plan de emergencia, intentamos cambiar al otro si el tipo de via es el correcto.
+		// Si estï¿½ funcionando el plan de emergencia, intentamos cambiar al otro si el tipo de via es el correcto.
 		if (isEmergencyPlanSet && 
 				(this.getRoadSensor().getRoadType() == ERoadType.STD_ROAD || this.getRoadSensor().getRoadType() == ERoadType.HIGHWAY))
 		{
-			// Comprobamos primero si los sensores necesarios están funcionando.
+			// Comprobamos primero si los sensores necesarios estï¿½n funcionando.
 			if(this.getRightLineSensor().isWorking() && this.getRightDistanceSensor().isWorking())
 			{
 				this.debugMessage("Changing to Park in the Road Fallback plan.");
@@ -62,8 +62,8 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 			}
 		}
 		
-		// Si el plan de emergencia es el de aparcar en la cuneta, comprobamos si los sensores están funcionando, y si no
-		// lo están haciendo, cambiamos al plan de emergencia.
+		// Si el plan de emergencia es el de aparcar en la cuneta, comprobamos si los sensores estï¿½n funcionando, y si no
+		// lo estï¿½n haciendo, cambiamos al plan de emergencia.
 		if (!isEmergencyPlanSet)
 		{
 			if(!this.getRightLineSensor().isWorking() || !this.getRightDistanceSensor().isWorking())
@@ -77,6 +77,9 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 		// ADS-2
 		if (!this.isWorking())
 		{
+			this.debugMessage("General fail. Changing to manual driving...");
+			this.getNotificationService().notify("General fail. Changing to manual driving...");
+
 			this.changeToL0Driving();
 			
 			return this;
@@ -168,15 +171,15 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 			return this;
 		}
 		
-		// Quizás cada sensor pueda monitorizarse de forma individual.
+		// Quizï¿½s cada sensor pueda monitorizarse de forma individual.
 		if (!this.getFrontDistanceSensor().isWorking() || !this.getRearDistanceSensor().isWorking()
 			|| !this.getRightDistanceSensor().isWorking() || !this.getLeftDistanceSensor().isWorking())
 		{
 			boolean areLIDARSensors = this.getFrontDistanceSensor().getClass().getName().contains("LIDAR");
 			
-			// No hay un sensor mejor para usar, ya que si se está usando este significa que los otros
-			// también están rotos. Por tanto, tenemos que realizar un Take Over o el Fallback plan según
-			// la atención del conductor.
+			// No hay un sensor mejor para usar, ya que si se estï¿½ usando este significa que los otros
+			// tambiï¿½n estï¿½n rotos. Por tanto, tenemos que realizar un Take Over o el Fallback plan segï¿½n
+			// la atenciï¿½n del conductor.
 			if (areLIDARSensors)
 			{
 				if (this.getHumanSensors().isDriverAttending())
@@ -194,7 +197,7 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 			}
 			else
 			{
-				// Comprobamos si los sensores LIDAR están operativos.
+				// Comprobamos si los sensores LIDAR estï¿½n operativos.
 				IDistanceSensor LIDAR_FrontDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=LIDAR-FrontDistanceSensor)");
 				IDistanceSensor LIDAR_RearDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=LIDAR-RearDistanceSensor)");
 				IDistanceSensor LIDAR_RightDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=LIDAR-RightDistanceSensor)");

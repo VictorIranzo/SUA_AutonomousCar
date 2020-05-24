@@ -72,6 +72,9 @@ public class L3_CityChauffer extends L3_DrivingService implements IL3_CityChauff
 		// ADS-2
 		if (!this.isWorking())
 		{
+			this.debugMessage("General fail. Changing to manual driving...");
+			this.getNotificationService().notify("General fail. Changing to manual driving...");
+
 			this.changeToL0Driving();
 			
 			return this;
