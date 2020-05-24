@@ -74,6 +74,14 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 			}
 		}
 		
+		// ADS-2
+		if (!this.isWorking())
+		{
+			this.changeToL0Driving();
+			
+			return this;
+		}
+		
 		// ADS_L3-1.
 		if ( this.getRoadSensor().getRoadType() == ERoadType.OFF_ROAD || this.getRoadSensor().getRoadType() == ERoadType.STD_ROAD ) {
 			this.debugMessage("Cannot drive in L3 Autonomy level ...");

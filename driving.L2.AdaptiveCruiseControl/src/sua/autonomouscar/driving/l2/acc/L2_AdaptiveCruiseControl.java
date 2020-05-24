@@ -35,6 +35,14 @@ public class L2_AdaptiveCruiseControl extends L2_DrivingService implements IL2_A
 		    }
 		}	
 		
+		// ADS-2
+		if (!this.isWorking())
+		{
+			this.changeToL0Driving();
+			
+			return this;
+		}
+		
 		boolean correction_performed = false;
 		
 		// Reducimos la velocidad un poco si detectamos distancia frontal inferior a distancia de seguridad

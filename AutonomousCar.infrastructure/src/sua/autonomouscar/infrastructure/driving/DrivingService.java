@@ -2,7 +2,12 @@ package sua.autonomouscar.infrastructure.driving;
 
 import org.osgi.framework.BundleContext;
 
+import sua.autonomouscar.driving.defaultvalues.L2_AdaptiveCruiseControl_DefaultValues;
 import sua.autonomouscar.driving.interfaces.IDrivingService;
+import sua.autonomouscar.driving.interfaces.IL0_ManualDriving;
+import sua.autonomouscar.driving.interfaces.IL2_AdaptiveCruiseControl;
+import sua.autonomouscar.driving.interfaces.IL3_DrivingService;
+import sua.autonomouscar.infrastructure.OSGiUtils;
 import sua.autonomouscar.infrastructure.Thing;
 import sua.autonomouscar.simulation.interfaces.ISimulationElement;
 
@@ -52,9 +57,17 @@ public abstract class DrivingService extends Thing implements IDrivingService, I
 		System.out.println("[ " + this.getId() + " ] " + msg);
 	}
 
-	
+	private boolean isWorking = true;
 
-	
+	@Override
+	public boolean isWorking() {
+		return this.isWorking;
+	}
+
+	@Override
+	public void setIsWorking(boolean isWorking) {
+		this.isWorking = isWorking;
+	}
 	
 	// ISimulationElement
 	@Override
@@ -63,5 +76,16 @@ public abstract class DrivingService extends Thing implements IDrivingService, I
 			this.performTheDrivingFunction();
 	}
 
-	
+	public DrivingService changeToL0Driving() {
+		// First, stops driving.
+		this.stopDriving();
+
+		// Obtains the registered control and configures it.
+		IL0_ManualDriving manualDriving = OSGiUtils.getService(context, IL0_ManualDriving.class);	
+		
+		// Starts driving with L2 level.
+		manualDriving.startDriving();
+		
+		return this;
+	}
 }

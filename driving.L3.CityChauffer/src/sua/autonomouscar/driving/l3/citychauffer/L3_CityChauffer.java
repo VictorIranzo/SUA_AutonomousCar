@@ -69,6 +69,14 @@ public class L3_CityChauffer extends L3_DrivingService implements IL3_CityChauff
 			this.setFallbackPlan("EmergencyFallbackPlan");
 		}
 		
+		// ADS-2
+		if (!this.isWorking())
+		{
+			this.changeToL0Driving();
+			
+			return this;
+		}
+		
 		// ADS_L3-1.
 		if (this.getRoadSensor().getRoadType() == ERoadType.OFF_ROAD || this.getRoadSensor().getRoadType() == ERoadType.STD_ROAD) {
 			this.debugMessage("Cannot drive in L3 Autonomy level ...");

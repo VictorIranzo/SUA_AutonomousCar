@@ -8,4 +8,6 @@ public interface IDrivingService extends IIdentifiable{
 	public IDrivingService stopDriving();
 	public boolean isDriving();
 
+	public boolean isWorking();
+	public void setIsWorking(boolean isWorking);
 }

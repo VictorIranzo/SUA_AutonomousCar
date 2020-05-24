@@ -56,6 +56,14 @@ public class L3_TrafficJamChauffer extends L3_DrivingService implements IL3_Traf
 		    }
 		}
 		
+		// ADS-2
+		if (!this.isWorking())
+		{
+			this.changeToL0Driving();
+			
+			return this;
+		}
+		
 		// ADS-L3_7.
 		IFallbackPlan fallbackPlan = this.getFallbackPlan();
 		boolean isEmergencyPlanSet = fallbackPlan == null ? false : fallbackPlan.getClass().getName().equals(EmergencyFallbackPlan.class.getName());

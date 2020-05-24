@@ -38,6 +38,14 @@ public class L1_AssistedDriving extends L1_DrivingService implements IL1_Assiste
 		    }
 		}
 		
+		// ADS-2
+		if (!this.isWorking())
+		{
+			this.changeToL0Driving();
+			
+			return this;
+		}
+		
 		boolean correction_required = false;
 		
 		// Reducimos la velocidad un poco si detectamos distancia frontal inferior a distancia de seguridad

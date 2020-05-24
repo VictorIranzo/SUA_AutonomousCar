@@ -51,8 +51,15 @@ public abstract class FallbackPlan extends DrivingService implements IFallbackPl
 		return OSGiUtils.getService(context, INotificationService.class, String.format("(%s=%s)", IIdentifiable.ID, this.notificationService));
 	}
 
+	private boolean isWorking = true;
 
-	
-	
+	@Override
+	public boolean isWorking() {
+		return this.isWorking;
+	}
 
+	@Override
+	public void setIsWorking(boolean isWorking) {
+		this.isWorking = isWorking;
+	}
 }

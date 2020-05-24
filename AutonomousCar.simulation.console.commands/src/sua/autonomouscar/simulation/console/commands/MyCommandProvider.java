@@ -86,6 +86,11 @@ public class MyCommandProvider {
 			}
 			
 			try {
+				System.out.println(String.format("|\t                  Working: %s", ((IL3_DrivingService)drivingService).isWorking()));
+			} catch (Exception e) {
+			}
+			
+			try {
 				System.out.println(String.format("|\t          Reference Speed: %d Km/h", ((IL3_DrivingService)drivingService).getReferenceSpeed()));
 			} catch (Exception e) {
 			}
@@ -388,6 +393,11 @@ public class MyCommandProvider {
 	{
 		switch(sensor)
 		{
+			case "general":
+				IDrivingService drivingService = OSGiUtils.getService(context, IDrivingService.class, String.format("(%s=true)", DrivingService.ACTIVE));
+				
+				if (drivingService != null) drivingService.setIsWorking(value);
+			break;
 			case "human":
 				IHumanSensors humanSensor = OSGiUtils.getService(context, IHumanSensors.class, String.format("(id=%s)", "HumanSensors"));
 				
