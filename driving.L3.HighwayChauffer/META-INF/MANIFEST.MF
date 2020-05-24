@@ -8,6 +8,7 @@ Bundle-Vendor: JoanFons@SUA
 Import-Package: org.osgi.framework,
  sua.autonomouscar.devices.interfaces,
  sua.autonomouscar.driving.defaultvalues,
+ sua.autonomouscar.driving.emergencyfallbackplan,
  sua.autonomouscar.driving.interfaces,
  sua.autonomouscar.infrastructure,
  sua.autonomouscar.infrastructure.devices,

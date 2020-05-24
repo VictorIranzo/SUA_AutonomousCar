@@ -60,7 +60,8 @@ public abstract class L3_DrivingService extends L2_DrivingService implements IL3
 		return;
 	}
 	
-	protected IFallbackPlan getFallbackPlan() {
+	@Override
+	public IFallbackPlan getFallbackPlan() {
 		return OSGiUtils.getService(context, IFallbackPlan.class, String.format("(%s=%s)", IIdentifiable.ID, this.fallbackPlan));
 	}
 

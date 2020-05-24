@@ -5,7 +5,10 @@ import org.osgi.framework.BundleContext;
 import sua.autonomouscar.devices.interfaces.IDistanceSensor;
 import sua.autonomouscar.devices.interfaces.ISpeedometer;
 import sua.autonomouscar.driving.defaultvalues.*;
+import sua.autonomouscar.driving.emergencyfallbackplan.EmergencyFallbackPlan;
 import sua.autonomouscar.driving.interfaces.IDrivingService;
+import sua.autonomouscar.driving.interfaces.IEmergencyFallbackPlan;
+import sua.autonomouscar.driving.interfaces.IFallbackPlan;
 import sua.autonomouscar.driving.interfaces.IL2_AdaptiveCruiseControl;
 import sua.autonomouscar.driving.interfaces.IL3_CityChauffer;
 import sua.autonomouscar.driving.interfaces.IL3_DrivingService;
@@ -182,6 +185,18 @@ public class L3_CityChauffer extends L3_DrivingService implements IL3_CityChauff
 			}
 			
 			return this;
+		}
+		
+		// ADS-L3_7
+		// Asumimos que por el tipo de carretera, el tipo de fallback plan asociado es siempre el de emergencia.
+		IFallbackPlan fallbackPlan = this.getFallbackPlan();
+		boolean isEmergencyPlanSet = fallbackPlan == null ? false : fallbackPlan.getClass().getName().equals(EmergencyFallbackPlan.class.getName());
+		
+		if (!isEmergencyPlanSet)
+		{		
+			this.debugMessage("Changing to Emergency plan.");
+
+			this.setFallbackPlan("EmergencyFallbackPlan");
 		}
 		
 		//

@@ -81,6 +81,11 @@ public class MyCommandProvider {
 			System.out.println(String.format("|\t%s", drivingService.getId()));
 		
 			try {
+				System.out.println(String.format("|\t            Fallback plan: %s", ((IL3_DrivingService)drivingService).getFallbackPlan().getClass().getName()));
+			} catch (Exception e) {
+			}
+			
+			try {
 				System.out.println(String.format("|\t          Reference Speed: %d Km/h", ((IL3_DrivingService)drivingService).getReferenceSpeed()));
 			} catch (Exception e) {
 			}

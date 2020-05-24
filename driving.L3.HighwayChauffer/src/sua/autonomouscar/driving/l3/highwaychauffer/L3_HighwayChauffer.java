@@ -5,6 +5,7 @@ import org.osgi.framework.BundleContext;
 import sua.autonomouscar.devices.interfaces.IDistanceSensor;
 import sua.autonomouscar.devices.interfaces.ISpeedometer;
 import sua.autonomouscar.driving.defaultvalues.*;
+import sua.autonomouscar.driving.emergencyfallbackplan.EmergencyFallbackPlan;
 import sua.autonomouscar.driving.interfaces.*;
 import sua.autonomouscar.infrastructure.OSGiUtils;
 import sua.autonomouscar.infrastructure.devices.Engine;
@@ -173,6 +174,35 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 			}
 			
 			return this;
+		}
+		
+		// ADS-L3_7.
+		IFallbackPlan fallbackPlan = this.getFallbackPlan();
+		boolean isEmergencyPlanSet = fallbackPlan == null ? false : fallbackPlan.getClass().getName().equals(EmergencyFallbackPlan.class.getName());
+		
+		// Si está funcionando el plan de emergencia, intentamos cambiar al otro si el tipo de via es el correcto.
+		if (isEmergencyPlanSet && 
+				(this.getRoadSensor().getRoadType() == ERoadType.STD_ROAD || this.getRoadSensor().getRoadType() == ERoadType.HIGHWAY))
+		{
+			// Comprobamos primero si los sensores necesarios están funcionando.
+			if(this.getRightLineSensor().isWorking() && this.getRightDistanceSensor().isWorking())
+			{
+				this.debugMessage("Changing to Park in the Road Fallback plan.");
+
+				this.setFallbackPlan("ParkInTheRoadShoulderFallbackPlan");
+			}
+		}
+		
+		// Si el plan de emergencia es el de aparcar en la cuneta, comprobamos si los sensores están funcionando, y si no
+		// lo están haciendo, cambiamos al plan de emergencia.
+		if (!isEmergencyPlanSet)
+		{
+			if(!this.getRightLineSensor().isWorking() || !this.getRightDistanceSensor().isWorking())
+			{
+				this.debugMessage("Changing to Emergency plan.");
+
+				this.setFallbackPlan("EmergencyFallbackPlan");
+			}
 		}
 		
 		//
