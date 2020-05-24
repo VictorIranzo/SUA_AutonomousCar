@@ -1,11 +1,15 @@
 package sua.autonomouscar.driving.l2.acc;
 
 import org.osgi.framework.BundleContext;
+
+import sua.autonomouscar.devices.interfaces.IDistanceSensor;
 import sua.autonomouscar.driving.defaultvalues.L2_AdaptiveCruiseControl_DefaultValues;
 import sua.autonomouscar.driving.interfaces.IDrivingService;
 import sua.autonomouscar.driving.interfaces.IL2_AdaptiveCruiseControl;
+import sua.autonomouscar.infrastructure.OSGiUtils;
 import sua.autonomouscar.infrastructure.devices.Engine;
 import sua.autonomouscar.infrastructure.driving.L2_DrivingService;
+import sua.autonomouscar.interfaces.IIdentifiable;
 
 public class L2_AdaptiveCruiseControl extends L2_DrivingService implements IL2_AdaptiveCruiseControl {	
 	public L2_AdaptiveCruiseControl(BundleContext context, String id) {
@@ -16,6 +20,20 @@ public class L2_AdaptiveCruiseControl extends L2_DrivingService implements IL2_A
 	
 	@Override
 	public IDrivingService performTheDrivingFunction() {
+		// ADS-1
+		if (this.getFrontDistanceSensor().getClass().getName().contains("LIDAR"))
+		{
+			// Comprobamos si el sensor de distancia dedicados están disponibles, para emplearlos.
+			IDistanceSensor FrontDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=FrontDistanceSensor)");
+	
+		    boolean isWorkingDistanceSensor = FrontDistanceSensor.isWorking();
+		    
+		    // Según la especificación, solo se necesita el sensor frontal.
+		    if (isWorkingDistanceSensor)
+		    {
+		    	this.setFrontDistanceSensor("FrontDistanceSensor");
+		    }
+		}	
 		
 		boolean correction_performed = false;
 		

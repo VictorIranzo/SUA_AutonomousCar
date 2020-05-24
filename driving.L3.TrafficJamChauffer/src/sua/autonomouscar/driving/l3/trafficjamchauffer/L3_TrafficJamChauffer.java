@@ -35,6 +35,27 @@ public class L3_TrafficJamChauffer extends L3_DrivingService implements IL3_Traf
 	
 	@Override
 	public IDrivingService performTheDrivingFunction() {
+		// ADS-1
+		if (this.getFrontDistanceSensor().getClass().getName().contains("LIDAR"))
+		{
+			// Comprobamos si los sensores de distancia dedicados están disponibles, para emplearlos.
+			IDistanceSensor FrontDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=FrontDistanceSensor)");
+			IDistanceSensor RearDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=RearDistanceSensor)");
+			IDistanceSensor RightDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=RightDistanceSensor)");
+			IDistanceSensor LeftDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=LeftDistanceSensor)");
+	
+		    boolean isWorkingDistanceSensor = FrontDistanceSensor.isWorking() && RearDistanceSensor.isWorking() 
+		    		&& RightDistanceSensor.isWorking() && LeftDistanceSensor.isWorking();
+		    
+		    if (isWorkingDistanceSensor)
+		    {
+		    	this.setFrontDistanceSensor("FrontDistanceSensor");
+		    	this.setRearDistanceSensor("RearDistanceSensor");
+		    	this.setRightDistanceSensor("RightDistanceSensor");
+		    	this.setLeftDistanceSensor("LeftDistanceSensor");
+		    }
+		}
+		
 		// ADS-L3_7.
 		IFallbackPlan fallbackPlan = this.getFallbackPlan();
 		boolean isEmergencyPlanSet = fallbackPlan == null ? false : fallbackPlan.getClass().getName().equals(EmergencyFallbackPlan.class.getName());

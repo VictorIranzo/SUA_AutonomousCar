@@ -2,9 +2,12 @@ package sua.autonomouscar.driving.l1.assisteddriving;
 
 import org.osgi.framework.BundleContext;
 
+import sua.autonomouscar.devices.interfaces.IDistanceSensor;
 import sua.autonomouscar.driving.interfaces.IDrivingService;
 import sua.autonomouscar.driving.interfaces.IL1_AssistedDriving;
+import sua.autonomouscar.infrastructure.OSGiUtils;
 import sua.autonomouscar.infrastructure.driving.L1_DrivingService;
+import sua.autonomouscar.interfaces.IIdentifiable;
 
 public class L1_AssistedDriving extends L1_DrivingService implements IL1_AssistedDriving {
 	
@@ -20,6 +23,20 @@ public class L1_AssistedDriving extends L1_DrivingService implements IL1_Assiste
 	
 	@Override
 	public IDrivingService performTheDrivingFunction() {
+		// ADS-1
+		if (this.getFrontDistanceSensor().getClass().getName().contains("LIDAR"))
+		{
+			// Comprobamos si el sensor de distancia dedicados están disponibles, para emplearlos.
+			IDistanceSensor FrontDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=FrontDistanceSensor)");
+	
+		    boolean isWorkingDistanceSensor = FrontDistanceSensor.isWorking();
+		    
+		    // Según la especificación, solo se necesita el sensor frontal.
+		    if (isWorkingDistanceSensor)
+		    {
+		    	this.setFrontDistanceSensor("FrontDistanceSensor");
+		    }
+		}
 		
 		boolean correction_required = false;
 		

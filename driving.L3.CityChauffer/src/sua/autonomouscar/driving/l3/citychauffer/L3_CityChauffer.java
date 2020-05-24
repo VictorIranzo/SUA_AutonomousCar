@@ -36,6 +36,27 @@ public class L3_CityChauffer extends L3_DrivingService implements IL3_CityChauff
 	
 	@Override
 	public IDrivingService performTheDrivingFunction() {
+		// ADS-1
+		if (this.getFrontDistanceSensor().getClass().getName().contains("LIDAR"))
+		{
+			// Comprobamos si los sensores de distancia dedicados están disponibles, para emplearlos.
+			IDistanceSensor FrontDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=FrontDistanceSensor)");
+			IDistanceSensor RearDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=RearDistanceSensor)");
+			IDistanceSensor RightDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=RightDistanceSensor)");
+			IDistanceSensor LeftDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=LeftDistanceSensor)");
+	
+		    boolean isWorkingDistanceSensor = FrontDistanceSensor.isWorking() && RearDistanceSensor.isWorking() 
+		    		&& RightDistanceSensor.isWorking() && LeftDistanceSensor.isWorking();
+		    
+		    if (isWorkingDistanceSensor)
+		    {
+		    	this.setFrontDistanceSensor("FrontDistanceSensor");
+		    	this.setRearDistanceSensor("RearDistanceSensor");
+		    	this.setRightDistanceSensor("RightDistanceSensor");
+		    	this.setLeftDistanceSensor("LeftDistanceSensor");
+		    }
+		}
+		
 		// ADS-L3_7
 		// Asumimos que por el tipo de carretera, el tipo de fallback plan asociado es siempre el de emergencia.
 		IFallbackPlan fallbackPlan = this.getFallbackPlan();
