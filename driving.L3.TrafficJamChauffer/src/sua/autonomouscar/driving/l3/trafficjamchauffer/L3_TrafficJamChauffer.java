@@ -89,6 +89,20 @@ public class L3_TrafficJamChauffer extends L3_DrivingService implements IL3_Traf
 			}
 		}
 		
+		// INTERACT-2
+		if (this.getHumanSensors().areTheHandsOnTheWheel())
+		{
+			this.getNotificationService().addInteractionMechanism("SteeringWheel_HapticVibration");
+		}
+		else
+		{
+			this.getNotificationService()
+				.removeInteractionMechanism("SteeringWheel_HapticVibration")
+				.addInteractionMechanism("DriverSeat_HapticVibration");
+		}
+		
+		// INTERACT-3
+		
 		// ADS-2
 		if (!this.isWorking())
 		{

@@ -102,6 +102,18 @@ public class L3_CityChauffer extends L3_DrivingService implements IL3_CityChauff
 			}
 		}
 		
+		// INTERACT-2
+		if (this.getHumanSensors().areTheHandsOnTheWheel())
+		{
+			this.getNotificationService().addInteractionMechanism("SteeringWheel_HapticVibration");
+		}
+		else
+		{
+			this.getNotificationService()
+				.removeInteractionMechanism("SteeringWheel_HapticVibration")
+				.addInteractionMechanism("DriverSeat_HapticVibration");
+		}
+		
 		// ADS-2
 		if (!this.isWorking())
 		{
