@@ -118,6 +118,23 @@ public class L3_HighwayChauffer extends L3_DrivingService implements IL3_Highway
 				.removeInteractionMechanism("SteeringWheel_HapticVibration")
 				.addInteractionMechanism("DriverSeat_HapticVibration");
 		}
+	
+		// INTERACT-3
+		if (this.getHumanSensors().isDriverSeatOccupied())
+		{
+			this.getNotificationService()
+				.addInteractionMechanism("DriverDisplay_VisualIcon")
+				.addInteractionMechanism("DriverSeat_HapticVibration");
+		}
+		else
+		{
+			this.getNotificationService()
+				.removeInteractionMechanism("DriverDisplay_VisualText")
+				.removeInteractionMechanism("DriverDisplay_VisualIcon")
+				.removeInteractionMechanism("DriverSeat_HapticVibration")
+				.addInteractionMechanism("Speakers_AuditorySound")
+				.addInteractionMechanism("DashboardDisplay_VisualIcon");
+		}
 		
 		// ADS-2
 		if (!this.isWorking())
