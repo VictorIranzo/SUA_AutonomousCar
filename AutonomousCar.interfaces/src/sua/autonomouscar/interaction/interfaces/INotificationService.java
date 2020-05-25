@@ -10,4 +10,6 @@ public interface INotificationService extends IIdentifiable {
 	public INotificationService removeInteractionMechanism(String mechanism);
 
 	public INotificationService removeAllInteractionMechanisms();
+
+	public String getAllMechanisms();
 }

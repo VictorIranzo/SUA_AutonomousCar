@@ -54,4 +54,16 @@ public class NotificationService extends Thing implements INotificationService {
 		
 		return this;
 	}
+
+	@Override
+	public String getAllMechanisms() {
+		String result = "";
+		
+		for(String mechanism : this.mechanisms)
+		{
+			result += mechanism + ", ";
+		}
+		
+		return result;
+	}
 }

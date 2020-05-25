@@ -75,7 +75,8 @@ public abstract class L1_DrivingService extends L0_DrivingService implements IL1
 		return;
 	}
 	
-	protected INotificationService getNotificationService() {
+	@Override
+	public INotificationService getNotificationService() {
 		return OSGiUtils.getService(context, INotificationService.class, String.format("(%s=%s)", IIdentifiable.ID, this.notificationService));
 	}
 

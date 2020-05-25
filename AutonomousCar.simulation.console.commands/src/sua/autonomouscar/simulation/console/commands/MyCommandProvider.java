@@ -91,6 +91,11 @@ public class MyCommandProvider {
 			}
 			
 			try {
+				System.out.println(String.format("|\t  Notification mechanisms: %s", ((IL1_DrivingService)drivingService).getNotificationService().getAllMechanisms()));
+			} catch (Exception e) {
+			}
+			
+			try {
 				System.out.println(String.format("|\t          Reference Speed: %d Km/h", ((IL3_DrivingService)drivingService).getReferenceSpeed()));
 			} catch (Exception e) {
 			}

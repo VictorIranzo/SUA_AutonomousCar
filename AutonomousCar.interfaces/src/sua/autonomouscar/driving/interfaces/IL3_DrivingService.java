@@ -1,8 +1,12 @@
 package sua.autonomouscar.driving.interfaces;
 
+import sua.autonomouscar.devices.interfaces.IHumanSensors;
+
 public interface IL3_DrivingService extends IL2_DrivingService {
 	
 	public void setHumanSensors(String humanSensors);
+	public IHumanSensors getHumanSensors();
+	
 	public void setRoadSensor(String roadSensors);
 	
 	public void setFallbackPlan(String plan);
