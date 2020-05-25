@@ -69,6 +69,39 @@ public class L3_CityChauffer extends L3_DrivingService implements IL3_CityChauff
 			this.setFallbackPlan("EmergencyFallbackPlan");
 		}
 		
+		// INTERACT-1
+		if (this.getHumanSensors().isDriverAttending())
+		{
+			this.getNotificationService().removeAllInteractionMechanisms();
+			
+			this.getNotificationService()
+				.addInteractionMechanism("DriverDisplay_VisualText")
+				.addInteractionMechanism("Speakers_AuditoryBeep")
+				.addInteractionMechanism("SteeringWheel_HapticVibration");
+		}
+		else
+		{
+			if (this.getHumanSensors().getFaceStatus() == EFaceStatus.SLEEPING)
+			{
+				this.getNotificationService().removeAllInteractionMechanisms();
+				
+				this.getNotificationService()
+					.addInteractionMechanism("DriverSeat_HapticVibration")
+					.addInteractionMechanism("Speakers_AuditorySound")
+					.addInteractionMechanism("SteeringWheel_HapticVibration");
+			}
+			
+			if (this.getHumanSensors().getFaceStatus() == EFaceStatus.DISTRACTED)
+			{
+				this.getNotificationService().removeAllInteractionMechanisms();
+				
+				this.getNotificationService()
+					.addInteractionMechanism("DriverDisplay_VisualText")
+					.addInteractionMechanism("Speakers_AuditoryBeep")
+					.addInteractionMechanism("SteeringWheel_HapticVibration");
+			}
+		}
+		
 		// ADS-2
 		if (!this.isWorking())
 		{

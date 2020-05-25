@@ -47,7 +47,11 @@ public class NotificationService extends Thing implements INotificationService {
 		return this;
 	}
 
-
-
-
+	@Override
+	public INotificationService removeAllInteractionMechanisms()
+	{
+		this.mechanisms.clear();
+		
+		return this;
+	}
 }
