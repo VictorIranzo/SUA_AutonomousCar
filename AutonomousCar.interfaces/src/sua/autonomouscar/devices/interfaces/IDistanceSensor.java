@@ -8,4 +8,6 @@ public interface IDistanceSensor {
 	public void setIsWorking(boolean isWorking);
 	
 	public IDistanceSensor setDistance(int distance); // for simulation purposes only
+	
+	public String getName();
 }

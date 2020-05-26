@@ -24,7 +24,7 @@ public class L1_AssistedDriving extends L1_DrivingService implements IL1_Assiste
 	@Override
 	public IDrivingService performTheDrivingFunction() {
 		// ADS-1
-		if (this.getFrontDistanceSensor().getClass().getName().contains("LIDAR"))
+		if (this.getFrontDistanceSensor().getName().contains("LIDAR"))
 		{
 			// Comprobamos si el sensor de distancia dedicados est�n disponibles, para emplearlos.
 			IDistanceSensor FrontDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=FrontDistanceSensor)");

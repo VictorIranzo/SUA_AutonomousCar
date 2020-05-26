@@ -37,6 +37,7 @@ public class NotificationService extends Thing implements INotificationService {
 
 	@Override
 	public INotificationService addInteractionMechanism(String m) {
+		this.mechanisms.remove(m);
 		this.mechanisms.add(m);
 		return this;
 	}

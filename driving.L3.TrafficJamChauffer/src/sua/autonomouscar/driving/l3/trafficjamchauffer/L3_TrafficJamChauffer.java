@@ -36,7 +36,7 @@ public class L3_TrafficJamChauffer extends L3_DrivingService implements IL3_Traf
 	@Override
 	public IDrivingService performTheDrivingFunction() {
 		// ADS-1
-		if (this.getFrontDistanceSensor().getClass().getName().contains("LIDAR"))
+		if (this.getFrontDistanceSensor().getName().contains("LIDAR"))
 		{
 			// Comprobamos si los sensores de distancia dedicados est�n disponibles, para emplearlos.
 			IDistanceSensor FrontDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=FrontDistanceSensor)");
@@ -49,6 +49,8 @@ public class L3_TrafficJamChauffer extends L3_DrivingService implements IL3_Traf
 		    
 		    if (isWorkingDistanceSensor)
 		    {
+				this.debugMessage("Replacing LIDAR by Distance sensor.");
+
 		    	this.setFrontDistanceSensor("FrontDistanceSensor");
 		    	this.setRearDistanceSensor("RearDistanceSensor");
 		    	this.setRightDistanceSensor("RightDistanceSensor");
@@ -105,7 +107,7 @@ public class L3_TrafficJamChauffer extends L3_DrivingService implements IL3_Traf
 		if (this.getHumanSensors().isDriverSeatOccupied())
 		{
 			this.getNotificationService()
-				.addInteractionMechanism("DriverDisplay_VisualIcon")
+				.addInteractionMechanism("DriverDisplay_VisualText")
 				.addInteractionMechanism("DriverSeat_HapticVibration");
 		}
 		else
@@ -247,7 +249,7 @@ public class L3_TrafficJamChauffer extends L3_DrivingService implements IL3_Traf
 		if (!this.getFrontDistanceSensor().isWorking() || !this.getRearDistanceSensor().isWorking()
 			|| !this.getRightDistanceSensor().isWorking() || !this.getLeftDistanceSensor().isWorking())
 		{
-			boolean areLIDARSensors = this.getFrontDistanceSensor().getClass().getName().contains("LIDAR");
+			boolean areLIDARSensors = this.getFrontDistanceSensor().getName().contains("LIDAR");
 			
 			// No hay un sensor mejor para usar, ya que si se est� usando este significa que los otros
 			// tambi�n est�n rotos. Por tanto, tenemos que realizar un Take Over o el Fallback plan seg�n
@@ -284,10 +286,10 @@ public class L3_TrafficJamChauffer extends L3_DrivingService implements IL3_Traf
 					this.debugMessage("Replacing distance sensors by LIDAR...");
 					this.getNotificationService().notify("Replacing distance sensors by LIDAR...");
 					
-			    	this.setFrontDistanceSensor("LIDAR_FrontDistanceSensor");
-			    	this.setRearDistanceSensor("LIDAR_RearDistanceSensor");
-			    	this.setRightDistanceSensor("LIDAR_RightDistanceSensor");
-			    	this.setLeftDistanceSensor("LIDAR_LeftDistanceSensor");
+			    	this.setFrontDistanceSensor("LIDAR-FrontDistanceSensor");
+			    	this.setRearDistanceSensor("LIDAR-RearDistanceSensor");
+			    	this.setRightDistanceSensor("LIDAR-RightDistanceSensor");
+			    	this.setLeftDistanceSensor("LIDAR-LeftDistanceSensor");
 			    }
 			    else
 			    {

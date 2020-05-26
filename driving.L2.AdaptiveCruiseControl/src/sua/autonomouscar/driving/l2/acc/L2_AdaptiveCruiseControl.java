@@ -21,7 +21,7 @@ public class L2_AdaptiveCruiseControl extends L2_DrivingService implements IL2_A
 	@Override
 	public IDrivingService performTheDrivingFunction() {
 		// ADS-1
-		if (this.getFrontDistanceSensor().getClass().getName().contains("LIDAR"))
+		if (this.getFrontDistanceSensor().getName().contains("LIDAR"))
 		{
 			// Comprobamos si el sensor de distancia dedicados est�n disponibles, para emplearlos.
 			IDistanceSensor FrontDistanceSensor = OSGiUtils.getService(context, IDistanceSensor.class, "(" + IIdentifiable.ID + "=FrontDistanceSensor)");
